@@ -92,71 +92,54 @@ The analyses were conducted in the R graphical user interface (GUI):
      ```
      
 
-#    customised function to create boxplots
-#    In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. 
-#    These methods are defined to give different treatments for the lower and upper tails 
-#    and whether they should be exclusive or inclusive. 
-#    Type 1: Inverse of empirical distribution function.
-#    Type 2: Similar to type 1 but with averaging at discontinuities.
-#    Type 3: SAS definition: nearest even order statistic.
-#    Type 4: Linear interpolation of the empirical cdf.
-#    Type 5: Piecewise linear function where the knots are the values of order statistics.
-#    Type 6: Linear interpolation of the expectations based on the order statistics (default).
-#    Type 7: Linear interpolation of the modes based on the order statistics.
-#    Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
-#    Type 9: Linear interpolation of the approximate medians for order statistics.   
-#    quantile.inc in excel is 7 
-#    NOTE not using R function boxplot to make whisker and box because this is NOT the method used by most graphics software
-#    the r function boxplot calls stats::fivenum to calculate the medium iqr and min and max; based on Tukey's five-number summary definition
-#    John Tukey's "hinges," which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any
-#    of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the
-#    data set or data half contains an odd number of points, the median is included in both halves.
-#    How Tukey's hinges are usually computed:
-#    1. The lower hinge is the median of the lower half of the data set (not including the overall median if the number of data points is odd).
-#    2. The upper hinge is the median of the upper half of the data set (again not including the overall median if the number of data points is odd).
-#    This method is somewhat akin to R's Type 1 method for calculating quantiles, also known as the "inverted empirical distribution function." 
-#    The `quantile` function in R with the option `type=1` 
-#    in R's default boxplot(), the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
-#    GraphPad Prism generally calculates quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
-#    R default and also here is type=6; should produce similar results to GraphPad
+customised function to create boxplots
 
-custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
-                           ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
-                           lwd=0.8, type=6) {
-    x <- data$x
-    y <- data$y
-    unique_x <- unique(data$x)
-    xrange <- xrange + c(-wid, wid)
-    plot(1, type="n", ylim=yrange, xlim=xrange, xlab=xlab, ylab=ylab, xaxt="n", yaxt="n", bty='n', lwd=lwd)
+In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. 
 
-    for (i in 1:length(unique_x)) {
-        current_x <- unique_x[i]
-        d <- data$y[data$x == current_x]
-        
-        q1 <- quantile(d, probs=0.25, type=type)
-        q3 <- quantile(d, probs=0.75, type=type)
-        iqr <- q3 - q1  # Calculate IQR
-        
-        lower_bound <- q1 - 1.5 * iqr  # Lower bound for outliers
-        upper_bound <- q3 + 1.5 * iqr  # Upper bound for outliers
-        
-        # Exclude outliers
-        d_filtered <- d[d >= lower_bound & d <= upper_bound]
+These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
 
-        median_val <- median(d_filtered)
-        min_val <- min(d_filtered)
-        max_val <- max(d_filtered)
-        
-        rect(current_x - wid, q1, current_x + wid, q3, col="white", lwd=lwd)
-        segments(current_x, q1, current_x, min_val, lwd=lwd)
-        segments(current_x, q3, current_x, max_val, lwd=lwd)
-        segments(current_x - cap, min_val, current_x + cap, min_val, lwd=lwd)
-        segments(current_x - cap, max_val, current_x + cap, max_val, lwd=lwd)
-        segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col="black", lwd=3*lwd)
-    }
-    axis(1, at=unique_x, labels=unique_x)
-    axis(2)
-}
+Type 1: Inverse of empirical distribution function.
+
+Type 2: Similar to type 1 but with averaging at discontinuities.
+
+Type 3: SAS definition: nearest even order statistic.
+
+Type 4: Linear interpolation of the empirical cdf.
+
+Type 5: Piecewise linear function where the knots are the values of order statistics.
+
+Type 6: Linear interpolation of the expectations based on the order statistics (default).
+
+Type 7: Linear interpolation of the modes based on the order statistics.
+
+Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
+
+Type 9: Linear interpolation of the approximate medians for order statistics.   
+
+quantile.inc in excel is 7 
+
+NOTE not using R function boxplot to make whisker and box because this is NOT the method used by most graphics software 
+
+the r function boxplot calls stats::fivenum to calculate the medium iqr and min and max; based on Tukey's five-number summary definition
+
+John Tukey's "hinges," which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
+
+How Tukey's hinges are usually computed:
+
+1. The lower hinge is the median of the lower half of the data set (not including the overall median if the number of data points is odd).
+
+2. The upper hinge is the median of the upper half of the data set (again not including the overall median if the number of data points is odd).
+
+This method is somewhat akin to R's Type 1 method for calculating quantiles, also known as the "inverted empirical distribution function." 
+
+The `quantile` function in R with the option `type=1` in R's default boxplot(), the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
+
+GraphPad Prism generally calculates quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
+
+R default and also here is type=6; should produce similar results to GraphPad
+
+
+
 
 #     notes on random mixed effects model
 #     y ~ x + (1|s):
