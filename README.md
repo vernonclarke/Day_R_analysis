@@ -91,7 +91,7 @@ The analyses were conducted in the R graphical user interface (GUI):
      }
      ```
      
-####################################################### code to create figures ####################################################### 
+
 #    customised function to create boxplots
 #    In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. 
 #    These methods are defined to give different treatments for the lower and upper tails 
