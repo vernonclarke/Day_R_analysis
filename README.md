@@ -181,27 +181,27 @@ The analyses were conducted in the R graphical user interface (GUI):
 	
 	# simple import function if NA is zero imports all exlcude excludes those subjects s
 	import.fun <- function(name, exclude=NA){
-	  df <- read.csv(paste0(name, '.csv'))
+	  	df <- read.csv(paste0(name, '.csv'))
 	  
-	  # Exclude rows based on 's' values
-	  if (!is.na(exclude[1])) {  # Check if the first element of 'exclude' is not NA
-	    df <- df[!(df$s %in% exclude), ]
-	  }
+	  	# Exclude rows based on 's' values
+	  	if (!is.na(exclude[1])) {  # Check if the first element of 'exclude' is not NA
+	    		df <- df[!(df$s %in% exclude), ]
+	  	}
 	  
-	  # Assuming the first two columns are always 's' and 'x'
-	  fixed_colnames <- c('s', 'x')
+	  	# Assuming the first two columns are always 's' and 'x'
+	  	fixed_colnames <- c('s', 'x')
 	  
-	  # Check the number of remaining columns after 's' and 'x'
-	  num_y_cols <- ncol(df) - length(fixed_colnames)
+	  	# Check the number of remaining columns after 's' and 'x'
+	  	num_y_cols <- ncol(df) - length(fixed_colnames)
 	  
-	  if (num_y_cols == 1) {
-	    y_colnames <- 'y'
-	  } else {
-	    y_colnames <- paste0('y', 1:num_y_cols)
-	  }
+	  	if (num_y_cols == 1) {
+	    		y_colnames <- 'y'
+	  	} else {
+	    		y_colnames <- paste0('y', 1:num_y_cols)
+	  	}
 	  
-	  colnames(df) <- c(fixed_colnames, y_colnames)
-	  return(df)
+	  	colnames(df) <- c(fixed_colnames, y_colnames)
+	  	return(df)
 	}
 
 
