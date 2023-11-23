@@ -47,7 +47,7 @@ The analyses were conducted in the R graphical user interface (GUI):
      wd <- paste0(getwd(), mypath)
      setwd(wd)
 
-     plotsave = TRUE  
+     plotsave <- TRUE  
      ``` 
 3. **Required Custom Functions**
 
@@ -89,8 +89,110 @@ The analyses were conducted in the R graphical user interface (GUI):
           axis(1, at=unique_x, labels=unique_x)
           axis(2)
      }
+
+     isSingular.fun <- function(formula, data){
+          mod <- suppressMessages(lmer(formula=formula, data=data))
+	  isSingular(mod)
+
+
+
+     fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50),  yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6){
+	
+	  # Fit the model using lme4
+	  # model_lmer <- lmer(y ~ x + (1|s))
+	  x <- data$x
+	  y <- data$y
+	  s <- data$s
+	  formula  <- y ~ x + (1|s)
+	  mixed <- !isSingular.fun(formula, data)
+	  mod <-  if (mixed) lmer(y ~ x + (1|s)) else lm(y ~ x)
+	  formula <- if (!mixed) y ~ x else formula
+	  cat("model is ", format(formula), "\n")
+	  print(summary(mod))
+
+	  if (mixed){
+	       fixed_effects <- fixef(mod)
+	       m <- fixed_effects[[2]]
+	       c <- fixed_effects[[1]]
+	  }else{
+	       coeffs <- coef(mod)
+	       m <- coeffs[[2]]
+	       c <- coeffs[[1]]
+	 }
+	
+	 # x intercept
+	 cat("x intercept is ", format(-c/m), "mV", "\n")
+
+	
+	 # In the context of linear mixed models, Rsqr can be a bit more complex to define and interpret than in standard linear regression. 
+	 # There are actually two commonly reported Rsqr values for linear mixed models:
+
+	 #     Marginal R2: Represents the variance explained by the fixed effects alone.	
+	 #     Conditional R2: Represents the variance explained by both the fixed and random effects.
+    
+	 # use MuMIn to evaluate r2 if necessary
+	 r2_values <- r.squaredGLMM(mod)
+ 	 # print(r2_values)
+        cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+	 # cat("rsqr (conditional) ", format(r2_values[2]))
+	 # 	 The boxplot function creates a box-and-whisker plot, which is a standardized way of displaying the distribution of data based on a five-number summary:
+	 #    Minimum: The smallest data point, including any outliers.
+	 #    First quartile (Q1): The data point below which 25% of the data fall.
+	 #    Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
+	 #    Third quartile (Q3): The data point below which 75% of the data fall.
+	 #    Maximum: The largest data point, including any outliers.
+
+	 # Add a column to data for jittered x-values
+	 set.seed(42)
+	 data$x_jitter <- jitter(data$x, amount=amount)
+	
+	 # Boxplots for each x value with outliers shown
+	 custom_boxplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
+	 # Plot individual data points with reduced jitter, reduced size, and unfilled circles without x and y axes
+	 points(data$x_jitter, data$y, pch=19, bg="transparent", col="darkgray", lwd=lwd/2, cex=p.cex)
+	 # Connect data points within subjects with gray dotted lines
+	 line=TRUE
+	 if (line){
+	      subjects <- unique(data$s)
+	      for(subj in subjects){
+  	           subset_data <- data[data$s == subj, ]
+  		   lines(subset_data$x_jitter, subset_data$y, col="darkgray", lwd=lwd, lty=3)  # lty=2 for dotted line
+	      }
+	 }
+	
+	 # Predict y values using the model for new data with matching grouping factor levels
+	 y_pred <- m * unique(x) + c
+	 # Add the line of best fit
+	 lines(unique(x), y_pred, col="black", lwd=lwd, lty=1)
+	
+	 # list(reversal=-c/m, r2_values =r2_values)	
+     }
+
+     # simple import function if NA is zero imports all exlcude excludes those subjects s
+     import.fun <- function(name, exclude=NA){
+          df <- read.csv(paste0(name, '.csv'))
+  
+          # Exclude rows based on 's' values
+          if (!is.na(exclude[1])) {  # Check if the first element of 'exclude' is not NA
+               df <- df[!(df$s %in% exclude), ]
+          }
+  
+          # Assuming the first two columns are always 's' and 'x'
+          fixed_colnames <- c('s', 'x')
+  
+          # Check the number of remaining columns after 's' and 'x'
+          num_y_cols <- ncol(df) - length(fixed_colnames)
+  
+          if (num_y_cols == 1) {
+               y_colnames <- 'y'
+          } else {
+               y_colnames <- paste0('y', 1:num_y_cols)
+          }
+  
+          colnames(df) <- c(fixed_colnames, y_colnames)
+          return(df)
+     }
      ```
-     
 
 customised function to create boxplots
 
@@ -139,7 +241,103 @@ GraphPad Prism generally calculates quartiles using the method that is commonly 
 R default and also here is type=6; should produce similar results to GraphPad
 
 
+     fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50),  yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6){
+	
+	 # Fit the model using lme4
+	 # model_lmer <- lmer(y ~ x + (1|s))
+	 x <- data$x
+	 y <- data$y
+	 s <- data$s
+	 formula  <- y ~ x + (1|s)
+	 mixed <- !isSingular.fun(formula, data)
+	 mod <-  if (mixed) lmer(y ~ x + (1|s)) else lm(y ~ x)
+	 formula <- if (!mixed) y ~ x else formula
+	 cat("model is ", format(formula), "\n")
+	 print(summary(mod))
 
+	 if (mixed){
+	      fixed_effects <- fixef(mod)
+	       m <- fixed_effects[[2]]
+		c <- fixed_effects[[1]]
+	}else{
+		coeffs <- coef(mod)
+		m <- coeffs[[2]]
+		c <- coeffs[[1]]
+	}
+	
+	# x intercept
+	cat("x intercept is ", format(-c/m), "mV", "\n")
+
+	
+	# In the context of linear mixed models, Rsqr can be a bit more complex to define and interpret than in standard linear regression. 
+	# There are actually two commonly reported Rsqr values for linear mixed models:
+
+	#     Marginal R2: Represents the variance explained by the fixed effects alone.	
+	#     Conditional R2: Represents the variance explained by both the fixed and random effects.
+    
+	# use MuMIn to evaluate r2 if necessary
+	r2_values <- r.squaredGLMM(mod)
+	# print(r2_values)
+    cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+	# cat("rsqr (conditional) ", format(r2_values[2]))
+	# 	 The boxplot function creates a box-and-whisker plot, which is a standardized way of displaying the distribution of data based on a five-number summary:
+	#    Minimum: The smallest data point, including any outliers.
+	#    First quartile (Q1): The data point below which 25% of the data fall.
+	#    Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
+	#    Third quartile (Q3): The data point below which 75% of the data fall.
+	#    Maximum: The largest data point, including any outliers.
+
+	# Add a column to data for jittered x-values
+	set.seed(42)
+	data$x_jitter <- jitter(data$x, amount=amount)
+	
+	# Boxplots for each x value with outliers shown
+	custom_boxplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
+	# Plot individual data points with reduced jitter, reduced size, and unfilled circles without x and y axes
+	points(data$x_jitter, data$y, pch=19, bg="transparent", col="darkgray", lwd=lwd/2, cex=p.cex)
+	# Connect data points within subjects with gray dotted lines
+	line=TRUE
+	if (line){
+		subjects <- unique(data$s)
+		for(subj in subjects){
+  			subset_data <- data[data$s == subj, ]
+  			lines(subset_data$x_jitter, subset_data$y, col="darkgray", lwd=lwd, lty=3)  # lty=2 for dotted line
+		}
+	}
+	
+	# Predict y values using the model for new data with matching grouping factor levels
+	y_pred <- m * unique(x) + c
+	# Add the line of best fit
+	lines(unique(x), y_pred, col="black", lwd=lwd, lty=1)
+	
+	# list(reversal=-c/m, r2_values =r2_values)	
+}
+
+# simple import function if NA is zero imports all exlcude excludes those subjects s
+import.fun <- function(name, exclude=NA){
+  df <- read.csv(paste0(name, '.csv'))
+  
+  # Exclude rows based on 's' values
+  if (!is.na(exclude[1])) {  # Check if the first element of 'exclude' is not NA
+    df <- df[!(df$s %in% exclude), ]
+  }
+  
+  # Assuming the first two columns are always 's' and 'x'
+  fixed_colnames <- c('s', 'x')
+  
+  # Check the number of remaining columns after 's' and 'x'
+  num_y_cols <- ncol(df) - length(fixed_colnames)
+  
+  if (num_y_cols == 1) {
+    y_colnames <- 'y'
+  } else {
+    y_colnames <- paste0('y', 1:num_y_cols)
+  }
+  
+  colnames(df) <- c(fixed_colnames, y_colnames)
+  return(df)
+}
+     ```
 
 #     notes on random mixed effects model
 #     y ~ x + (1|s):
