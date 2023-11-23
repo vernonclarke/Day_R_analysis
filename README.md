@@ -143,7 +143,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 		# use MuMIn to evaluate r2 if necessary
 		r2_values <- r.squaredGLMM(mod)
 		# print(r2_values)
-	    cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+	        cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
 		# cat("rsqr (conditional) ", format(r2_values[2]))
 		# 	 The boxplot function creates a box-and-whisker plot, which is a standardized way of displaying the distribution of data based on a five-number summary:
 		#    Minimum: The smallest data point, including any outliers.
