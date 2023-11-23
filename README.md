@@ -25,15 +25,14 @@ The analyses were conducted in the R graphical user interface (GUI):
      The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) 
 
 ```R
-     rm( list=ls(all=TRUE ) )
-     load_required_packages <- function(packages){
-          new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
-          if (length(new.packages)) install.packages(new.packages)
-          invisible(lapply(packages, library, character.only=TRUE))
-     }
-	  
-     required.packages <- c('MuMIn', 'svglite', 'lme4')
-     load_required_packages(required.packages) 
+	rm( list=ls(all=TRUE ) )
+	load_required_packages <- function(packages){
+		new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+		if (length(new.packages)) install.packages(new.packages)
+		invisible(lapply(packages, library, character.only=TRUE))
+	}	  
+	required.packages <- c('MuMIn', 'svglite', 'lme4')
+	load_required_packages(required.packages) 
 ```
     
 2. **Initial Settings**
@@ -55,39 +54,39 @@ The analyses were conducted in the R graphical user interface (GUI):
 	custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
 	                           ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
 	                           lwd=0.8, type=6) {
-	    x <- data$x
-	    y <- data$y
-	    unique_x <- unique(data$x)
-	    xrange <- xrange + c(-wid, wid)
-	    plot(1, type="n", ylim=yrange, xlim=xrange, xlab=xlab, ylab=ylab, xaxt="n", yaxt="n", bty='n', lwd=lwd)
-	
-	    for (i in 1:length(unique_x)) {
-	        current_x <- unique_x[i]
-	        d <- data$y[data$x == current_x]
-	        
-	        q1 <- quantile(d, probs=0.25, type=type)
-	        q3 <- quantile(d, probs=0.75, type=type)
-	        iqr <- q3 - q1  # Calculate IQR
-	        
-	        lower_bound <- q1 - 1.5 * iqr  # Lower bound for outliers
-	        upper_bound <- q3 + 1.5 * iqr  # Upper bound for outliers
-	        
-	        # Exclude outliers
-	        d_filtered <- d[d >= lower_bound & d <= upper_bound]
-	
-	        median_val <- median(d_filtered)
-	        min_val <- min(d_filtered)
-	        max_val <- max(d_filtered)
-	        
-	        rect(current_x - wid, q1, current_x + wid, q3, col="white", lwd=lwd)
-	        segments(current_x, q1, current_x, min_val, lwd=lwd)
-	        segments(current_x, q3, current_x, max_val, lwd=lwd)
-	        segments(current_x - cap, min_val, current_x + cap, min_val, lwd=lwd)
-	        segments(current_x - cap, max_val, current_x + cap, max_val, lwd=lwd)
-	        segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col="black", lwd=3*lwd)
-	    }
-	    axis(1, at=unique_x, labels=unique_x)
-	    axis(2)
+		x <- data$x
+		y <- data$y
+		unique_x <- unique(data$x)
+		xrange <- xrange + c(-wid, wid)
+		plot(1, type="n", ylim=yrange, xlim=xrange, xlab=xlab, ylab=ylab, xaxt="n", yaxt="n", bty='n', lwd=lwd)
+		
+		for (i in 1:length(unique_x)) {
+		current_x <- unique_x[i]
+		d <- data$y[data$x == current_x]
+		
+		q1 <- quantile(d, probs=0.25, type=type)
+		q3 <- quantile(d, probs=0.75, type=type)
+		iqr <- q3 - q1  # Calculate IQR
+		
+		lower_bound <- q1 - 1.5 * iqr  # Lower bound for outliers
+		upper_bound <- q3 + 1.5 * iqr  # Upper bound for outliers
+		
+		# Exclude outliers
+		d_filtered <- d[d >= lower_bound & d <= upper_bound]
+		
+		median_val <- median(d_filtered)
+		min_val <- min(d_filtered)
+		max_val <- max(d_filtered)
+		
+		rect(current_x - wid, q1, current_x + wid, q3, col="white", lwd=lwd)
+		segments(current_x, q1, current_x, min_val, lwd=lwd)
+		segments(current_x, q3, current_x, max_val, lwd=lwd)
+		segments(current_x - cap, min_val, current_x + cap, min_val, lwd=lwd)
+		segments(current_x - cap, max_val, current_x + cap, max_val, lwd=lwd)
+		segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col="black", lwd=3*lwd)
+		}
+		axis(1, at=unique_x, labels=unique_x)
+		axis(2)
 	}
 	
 	#     notes on random mixed effects model
