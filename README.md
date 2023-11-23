@@ -24,7 +24,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 
      The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) 
 
-     ```R
+```R
      rm( list=ls(all=TRUE ) )
      load_required_packages <- function(packages){
           new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
@@ -34,7 +34,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 	  
      required.packages <- c('MuMIn', 'svglite', 'lme4')
      load_required_packages(required.packages) 
-     ```
+```
     
 2. **Initial Settings**
 
@@ -42,16 +42,16 @@ The analyses were conducted in the R graphical user interface (GUI):
 
      - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
 
-     ```R
+```R
      mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
      wd <- paste0(getwd(), mypath)
      setwd(wd)
 
      plotsave <- TRUE  
-     ``` 
+``` 
 3. **Required Custom Functions**
 
-     ```R
+```R
 	custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
 	                           ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
 	                           lwd=0.8, type=6) {
@@ -205,7 +205,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 	}
 
 
-     ```
+```
 
 customised function to create boxplots
 
