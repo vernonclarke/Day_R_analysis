@@ -115,7 +115,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 		
 	fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6){
 		
-		# Fit the model using lme4
+		# Fit the model using lmer
 		# model_lmer <- lmer(y ~ x + (1|s))
 		x <- data$x
 		y <- data$y
@@ -157,7 +157,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 		set.seed(42)
 		data$x_jitter <- jitter(data$x, amount=amount)
 		
-		# Boxplots for each x value with outliers shown
+		# Boxplot
 		custom_boxplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
 		# Plot individual data points with reduced jitter, reduced size, and unfilled circles without x and y axes
 		points(data$x_jitter, data$y, pch=19, bg="transparent", col="darkgray", lwd=lwd/2, cex=p.cex)
@@ -179,7 +179,8 @@ The analyses were conducted in the R graphical user interface (GUI):
 		# list(reversal=-c/m, r2_values =r2_values)	
 	}
 	
-	# simple import function if NA is zero imports all exlcude excludes those subjects s
+	# simple function to import data from a ''csv' file
+	#  if NA is zero imports all exlcude excludes those subjects s
 	import.fun <- function(name, exclude=NA){
 	  	df <- read.csv(paste0(name, '.csv'))
 	  
@@ -227,7 +228,7 @@ The boxplot function creates a box-and-whisker plot, which is a standardized way
 3. Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
 4. Third quartile (Q3): The data point below which 75% of the data fall.
 5. Maximum: The largest data point, excluding any outliers.
-6. Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and q3 + 1.5 * iqr for upper bound limits.
+6. Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and Q3 + 1.5 * iqr for upper bound limits.
 
 Any outliers are removed and the default setting for calculating the quartiles is type = 6.
 
@@ -252,7 +253,7 @@ Type 8: Linear interpolation between the points that capture the α percent and 
 Type 9: Linear interpolation of the approximate medians for order statistics.   
 
 
-NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, call `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
+NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
 
 John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
@@ -264,30 +265,28 @@ How Tukey's hinges are usually computed:
 
 This method is somewhat akin to R's Type 1 method for calculating quantiles, also known as the "inverted empirical distribution function." 
 
-The `quantile` function in R with the option `type=1` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
+The `quantile` function in R with the option `type=1` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original 'hinge' method. 
 
-`GraphPad Prism` default seems to calculate quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
+`GraphPad Prism` default seems to calculate quartiles using the method that is commonly taught, which corresponds to 'Type 7' in R's `quantile` function
 
 ### Summary
 
 **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
 
-**The function `custom_boxplot` calculates quartiles using R function `quantile()`. This can be set to type = 1 to 9**
+**The function `custom_boxplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
 
-**The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`; for results closer (but not identical) Tukey's 'hinges' method / R's nativen `boxplot`, set type = 1**
+**The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`; for results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
 
+**Linear Regression** is performed using the package `lmer`. The function determines whether the data is singular. If not then it fits by random mixed effects model. In `lmer` terminology, the formula for this is **y ~ x + (1|s)**. This formula specifies how the dependent variable 'y' is modeled in relation to the independent (or fixed-effect) predictor variable 'x' and the random effect of the subject 's'. 
 
+### Random Mixed Effects Model
+**y ~ x + (1|s)**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s. 
 
-
-
-	#     notes on random mixed effects model
-	#     y ~ x + (1|s):
-	#     formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s 
-	#     y: This is the dependent variable you are trying to model or predict.
-	#     ~: The tilde separates the dependent variable from the independent variables and random effects.
-	#     x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
-	#     +: The plus sign indicates that you are including more terms in the model.
-	#     (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
+1. y: This is the dependent variable you are trying to model or predict.
+2. ~: The tilde separates the dependent variable from the independent variables and random effects.
+3. x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
+4. +: The plus sign indicates that you are including more terms in the model.
+5. (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
 
 
 
