@@ -229,8 +229,6 @@ The boxplot function creates a box-and-whisker plot, which is a standardized way
 5. Maximum: The largest data point, excluding any outliers.
 6. Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and q3 + 1.5 * iqr for upper bound limits.
 
-
-
 Any outliers are removed and the default setting for calculating the quartiles is type = 6.
 
 In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
@@ -254,7 +252,7 @@ Type 8: Linear interpolation between the points that capture the α percent and 
 Type 9: Linear interpolation of the approximate medians for order statistics.   
 
 
-NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is NOT the method used by most graphics software. The native R function calls `stats::fivenum` to calculate the medium iqr and min and max; based on Tukey's five-number summary definition.
+NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, call `stats::fivenum` to calculate the medium iqr and min and max; based on Tukey's five-number summary definition.
 
 John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
@@ -268,11 +266,13 @@ This method is somewhat akin to R's Type 1 method for calculating quantiles, als
 
 The `quantile()` function in R with the option `type=1` in R's default `boxplot()`, the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
 
-`GraphPad Prism` generally calculates quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
+`GraphPad Prism` default seems to calculate quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
 
-** In summary, the native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum` **
+### Summary
 
-** The function `custom_boxplot` calculates quartiles using R function `quantile()`. This can be set to type =1 to 9. The default setting is type = 6 which should produce similar results to `GraphPad Prism`  **
+**The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
+
+**The function `custom_boxplot` calculates quartiles using R function `quantile()`. This can be set to type =1 to 9. The default setting is type = 6 which should produce similar results to `GraphPad Prism`**
 
 
 
@@ -292,6 +292,12 @@ Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later)
 
 always re-install XQuartz when upgrading your macOS to a new major version. 
 
+
+
+
+n the boxplot.default function in R, the calculation of the hinges (which correspond to the first and third quartiles of the data) is not done directly within this function. Instead, the boxplot.default function calls another function, boxplot.stats, for each group of data it is plotting. This boxplot.stats function is where the actual computation of the hinges and other statistics necessary for the boxplot takes place.
+
+The boxplot.stats function calculates the hinges based on the quartiles of the data. The quartiles are typically calculated using a method that is similar to the Type 7 quantile algorithm in R, which is a part of the quantile function. This method involves interpolating between data points to compute quartiles, which is a common approach in statistical analysis.
 
 
 
