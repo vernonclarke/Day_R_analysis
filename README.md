@@ -252,7 +252,7 @@ Type 8: Linear interpolation between the points that capture the α percent and 
 Type 9: Linear interpolation of the approximate medians for order statistics.   
 
 
-NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, call `stats::fivenum` to calculate the medium iqr and min and max; based on Tukey's five-number summary definition.
+NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, call `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
 
 John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
