@@ -205,7 +205,12 @@ The analyses were conducted in the R graphical user interface (GUI):
 	  	return(df)
 	}
 
-
+	# Perform the Wilcoxon Signed-Rank Test
+	fun.wilcox2 <- function(data, paired=TRUE, alternative='two.sided', exact=NULL){
+		x <- data[data$x == 1,][order(data[data$x == 1,]$s),]$y
+		y <- data[data$x == 2,][order(data[data$x == 2,]$s),]$y
+		wilcox.test(x, y, paired = paired, alternative=alternative, exact=exact)
+		}
 ```
 
 4. **Data Analysis**
@@ -233,6 +238,24 @@ The analyses were conducted in the R graphical user interface (GUI):
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 	fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
 	fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
+
+	# FIG2F
+	dev.new(width=9 ,height=4,noRStudioGD=TRUE)
+	par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+	fun.plot(data1, p.cex=0.6)
+	fun.plot(data2, p.cex=0.6)
+	fun.plot(data3, p.cex=0.6)
+
+	# FIG2GJ
+	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+	fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6)
+	fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6)
+
+	# FIG2GJ: statisitcal tests
+	fun.wilcox2(data6)
+	fun.wilcox2(data7)
+
 ```
 	
 	# Fig3C
