@@ -1,15 +1,12 @@
 ### R analysis for Day et al., 2023
 
-Recreates graphical outputs and statistical analyses
+Recreates graphical outputs and statistical analyses in the manuscript 
 
 ## Table of Contents
-- [Initial Set Up](#Initial-Set-Up)
+- [Initial Set Up](#initial-set-up)
+  
 - [Performing analysis](#performing-analysis)
-  - [Getting Started](#getting-started)
-  - [Simulations](#running-simulations-in-jupyter-notebook)
-- [Data Analysis](#data-analysis)
-  - [Setting up](#setting-up)
-  - [Using R to analyse a simulation](#using-r-to-analyse-a-simulation)
+
  
 ## Initial Set Up
 
@@ -25,6 +22,8 @@ The analyses were conducted in the R graphical user interface (GUI):
   
   If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). The provided code should work although this has not been tested.
   
+## Performing analysis
+
   In order for the R code to work, it is necessary to load various packages within the R environment.
 
   The following steps 1-3 should be executed prior to any analysis. 
