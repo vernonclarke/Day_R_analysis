@@ -231,7 +231,7 @@ The boxplot function creates a box-and-whisker plot, which is a standardized way
 
 Any outliers are removed and the default setting for calculating the quartiles is type = 6.
 
-In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
+In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
 
 Type 1: Inverse of empirical distribution function.
 
@@ -264,7 +264,7 @@ How Tukey's hinges are usually computed:
 
 This method is somewhat akin to R's Type 1 method for calculating quantiles, also known as the "inverted empirical distribution function." 
 
-The `quantile()` function in R with the option `type=1` in R's default `boxplot()`, the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
+The `quantile` function in R with the option `type=1` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
 
 `GraphPad Prism` default seems to calculate quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
 
@@ -272,7 +272,11 @@ The `quantile()` function in R with the option `type=1` in R's default `boxplot(
 
 **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
 
-**The function `custom_boxplot` calculates quartiles using R function `quantile()`. This can be set to type =1 to 9. The default setting is type = 6 which should produce similar results to `GraphPad Prism`**
+**The function `custom_boxplot` calculates quartiles using R function `quantile()`. This can be set to type = 1 to 9**
+
+**The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`; for results closer (but not identical) Tukey's 'hinges' method / R's nativen `boxplot`, set type = 1**
+
+
 
 
 
