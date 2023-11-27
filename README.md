@@ -4,8 +4,11 @@ Recreates graphical outputs and statistical analyses in the manuscript
 
 ## Table of Contents
 - [Initial Set Up](#initial-set-up)
-  
-- [Performing analysis](#performing-analysis)
+- [Performing Analysis](#performing-analysis)
+
+- [Functions](#functions)
+  - [custom_boxplot](#custom_boxplot)
+
 
  
 ## Initial Set Up
@@ -20,9 +23,9 @@ The analyses were conducted in the R graphical user interface (GUI):
   
   Only the R console was used for analysis. 
   
-  If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). The provided code should work although this has not been tested.
+  If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). The provided code should work although this has not been explicitly tested.
   
-## Performing analysis
+## Performing Analysis
 
   In order for the R code to work, it is necessary to load various packages within the R environment.
 
@@ -33,6 +36,8 @@ The analyses were conducted in the R graphical user interface (GUI):
      This code will check if the relevant packages are already installed in R. If not, a prompt will appear requiring the user to select a download site for installing these repositories. This installation is only required once for new versions of R. Once/if installeed, the packages are then loaded into the current R environment.
 
      The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
+
+     
 
 
 ```R
@@ -101,18 +106,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 		axis(1, at=unique_x, labels=unique_x)
 		axis(2)
 	}
-	
-	#     notes on random mixed effects model
-	#     y ~ x + (1|s):
-	#     formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s 
-	#     y: This is the dependent variable you are trying to model or predict.
-	#     ~: The tilde separates the dependent variable from the independent variables and random effects.
-	#     x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
-	#     +: The plus sign indicates that you are including more terms in the model.
-	#     (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
-	
-	    
-	    
+		    
 	# if random effects model is singular
 	isSingular.fun <- function(formula, data){
 		mod <- suppressMessages(lmer(formula=formula, data=data))
@@ -158,12 +152,6 @@ The analyses were conducted in the R graphical user interface (GUI):
 		# print(r2_values)
 	        cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
 		# cat("rsqr (conditional) ", format(r2_values[2]))
-		#    The boxplot function creates a box-and-whisker plot, which is a standardized way of displaying the distribution of data based on a five-number summary:
-		#    Minimum: The smallest data point, including any outliers.
-		#    First quartile (Q1): The data point below which 25% of the data fall.
-		#    Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
-		#    Third quartile (Q3): The data point below which 75% of the data fall.
-		#    Maximum: The largest data point, including any outliers.
 	
 		# Add a column to data for jittered x-values
 		set.seed(42)
@@ -219,33 +207,33 @@ The analyses were conducted in the R graphical user interface (GUI):
 
 ```
 
-Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later). 
-
-always re-install XQuartz when upgrading your macOS to a new major version. 
-
-
-## Data Analysis
-
-this code should pull data from csv files and analyse it/produce boxplots etc and recreate relevant parts of the figures
-returns svg files that are then used to produce figures in Adobe Illustrator
-
-The final analysis and figures presented in the manuscript were generated using R. 
-
-The analyses were conducted in the R graphical user interface (GUI):
-  - R version 4.3.1 – "Beagle Scouts"
-  - [R Statistical Software](https://www.R-project.org/)
+4. **Data Analysis**
 
 
 
 
 
 
+## Functions
 
-customised function to create boxplots
+### custom_boxplot
 
-In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. 
+The function, `custom_boxplot` is a customised function to create boxplots. 
 
-These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
+The boxplot function creates a box-and-whisker plot, which is a standardized way of displaying the distribution of data based on a five-number summary:
+
+1. Minimum: The smallest data point, excluding any outliers.
+2. First quartile (Q1): The data point below which 25% of the data fall.
+3. Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
+4. Third quartile (Q3): The data point below which 75% of the data fall.
+5. Maximum: The largest data point, excluding any outliers.
+6. Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and q3 + 1.5 * iqr for upper bound limits.
+
+
+
+Any outliers are removed and the default setting for calculating the quartiles is type = 6.
+
+In R's quantile() function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
 
 Type 1: Inverse of empirical distribution function.
 
@@ -265,13 +253,10 @@ Type 8: Linear interpolation between the points that capture the α percent and 
 
 Type 9: Linear interpolation of the approximate medians for order statistics.   
 
-quantile.inc in excel is 7 
 
-NOTE not using R function boxplot to make whisker and box because this is NOT the method used by most graphics software 
+NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is NOT the method used by most graphics software. The native R function calls `stats::fivenum` to calculate the medium iqr and min and max; based on Tukey's five-number summary definition.
 
-the r function boxplot calls stats::fivenum to calculate the medium iqr and min and max; based on Tukey's five-number summary definition
-
-John Tukey's "hinges," which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
+John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
 How Tukey's hinges are usually computed:
 
@@ -281,10 +266,37 @@ How Tukey's hinges are usually computed:
 
 This method is somewhat akin to R's Type 1 method for calculating quantiles, also known as the "inverted empirical distribution function." 
 
-The `quantile` function in R with the option `type=1` in R's default boxplot(), the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
+The `quantile()` function in R with the option `type=1` in R's default `boxplot()`, the applied method is close to, but not exactly the same as, Tukey's original method for hinges. 
 
-GraphPad Prism generally calculates quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
+`GraphPad Prism` generally calculates quartiles using the method that is commonly taught, which corresponds to "Type 7" in R's quantile() function
 
-R default and also here is type=6; should produce similar results to GraphPad
+** In summary, the native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum` **
+
+** The function `custom_boxplot` calculates quartiles using R function `quantile()`. This can be set to type =1 to 9. The default setting is type = 6 which should produce similar results to `GraphPad Prism`  **
+
+
+
+	#     notes on random mixed effects model
+	#     y ~ x + (1|s):
+	#     formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s 
+	#     y: This is the dependent variable you are trying to model or predict.
+	#     ~: The tilde separates the dependent variable from the independent variables and random effects.
+	#     x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
+	#     +: The plus sign indicates that you are including more terms in the model.
+	#     (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
+
+
+
+ 
+Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later). 
+
+always re-install XQuartz when upgrading your macOS to a new major version. 
+
+
+
+
+
+
+
 
 
