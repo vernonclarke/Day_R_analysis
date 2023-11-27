@@ -210,6 +210,61 @@ The analyses were conducted in the R graphical user interface (GUI):
 
 4. **Data Analysis**
 
+   Having run all the previous code, this code performs the analysis and makes the graphs in the ms
+
+```R
+	# data for fig 2
+	# import data sets from stored csv
+	
+	data2F <- import.fun('data2F')
+	data1 <- data2F[, c("s", "x", "y1")]; colnames(data1)[3] <- "y"
+	data2 <- data2F[, c("s", "x", "y2")]; colnames(data2)[3] <- "y"
+	data3 <- data2F[, c("s", "x", "y3")]; colnames(data3)[3] <- "y"
+	
+	data2C <- import.fun('data2C')
+	data4 <- data2C[, c("s", "x", "y1")]; colnames(data4)[3] <- "y"
+	data5 <- data2C[, c("s", "x", "y2")]; colnames(data5)[3] <- "y"
+	
+	data6 <- import.fun('data2G')
+	data7 <- import.fun('data2J')
+
+	# FIG2C
+	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+	fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
+	fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
+```
+	
+	# Fig3C
+	data8 <- import.fun('data3CA')
+	data9 <- import.fun('data3CB')
+	
+	# Fig3G
+	data3F <- import.fun('data3F')
+	data10 <- data3F[, c("s", "x", "y1")]; colnames(data10)[3] <- "y"
+	data11 <- data3F[, c("s", "x", "y2")]; colnames(data11)[3] <- "y"
+	
+	# data for fig4 
+	data4E <- import.fun('data12')
+	data12 <- data4E[, c("s", "x", "y1")]; colnames(data12)[3] <- "y"
+	data13 <- data4E[, c("s", "x", "y2")]; colnames(data13)[3] <- "y"
+	
+	# data for figS1 
+	dataS1 <- read.csv('data14.csv')
+	colnames(dataS1) = c('A+B', 'C')
+	
+	# plot figures
+	
+	# FIG2C
+	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+	fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
+	fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
+
+
+```
+
+
 
 
 
