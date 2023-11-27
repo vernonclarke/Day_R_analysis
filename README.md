@@ -2,6 +2,46 @@
 
 Recreates graphical outputs and statistical analyses
 
+## Table of Contents
+- [Initial Set Up](#Initial-Set-Up)
+- [Performing analysis](#performing-analysis)
+  - [Getting Started](#getting-started)
+  - [Simulations](#running-simulations-in-jupyter-notebook)
+- [Data Analysis](#data-analysis)
+  - [Setting up](#setting-up)
+  - [Using R to analyse a simulation](#using-r-to-analyse-a-simulation)
+ 
+## Initial Set Up
+
+The final analysis and figures presented in the manuscript were generated using R. 
+
+The analyses were conducted in the R graphical user interface (GUI):
+  - R version 4.3.1 – "Beagle Scouts"
+  - [R Statistical Software](https://www.R-project.org/)
+
+  ### Setting up
+  
+  Only the R console was used for analysis. 
+  
+  If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). The provided code should work although this has not been tested.
+  
+  In order for the R code to work, it is necessary to load various packages within the R environment.
+
+  The following steps 1-3 should be executed prior ti any analysis. 
+  1. **Load Packages**
+
+     The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
+
+```R
+	rm( list=ls(all=TRUE ) )
+	load_required_packages <- function(packages){
+		new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+		if (length(new.packages)) install.packages(new.packages)
+		invisible(lapply(packages, library, character.only=TRUE))
+	}	  
+	required.packages <- c('MuMIn', 'svglite', 'lme4')
+	load_required_packages(required.packages) 
+```
 
 
 Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later). 
@@ -22,7 +62,10 @@ The analyses were conducted in the R graphical user interface (GUI):
 
   1. **Load Packages**
 
-     The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) 
+     This code will check if the relevant packages are already installed in R. If not, a prompt will appear requiring the user to select a download site for installing these repositories. This installation is only required once for new versions of R. Once/if installeed, the packages are then loaded into the current R environment.
+
+     The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
+
 
 ```R
 	rm( list=ls(all=TRUE ) )
@@ -48,7 +91,9 @@ The analyses were conducted in the R graphical user interface (GUI):
 
      plotsave <- TRUE  
 ``` 
-3. **Required Custom Functions**
+3. **Required Custom-written Functions**
+
+   The custom functions are required to make the graphs etc.
 
 ```R
 	custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
@@ -205,6 +250,11 @@ The analyses were conducted in the R graphical user interface (GUI):
 
 
 ```
+
+
+
+
+
 
 customised function to create boxplots
 
