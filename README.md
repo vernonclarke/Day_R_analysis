@@ -27,39 +27,8 @@ The analyses were conducted in the R graphical user interface (GUI):
   
   In order for the R code to work, it is necessary to load various packages within the R environment.
 
-  The following steps 1-3 should be executed prior ti any analysis. 
-  1. **Load Packages**
-
-     The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
-
-```R
-	rm( list=ls(all=TRUE ) )
-	load_required_packages <- function(packages){
-		new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
-		if (length(new.packages)) install.packages(new.packages)
-		invisible(lapply(packages, library, character.only=TRUE))
-	}	  
-	required.packages <- c('MuMIn', 'svglite', 'lme4')
-	load_required_packages(required.packages) 
-```
-
-
-Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later). 
-
-always re-install XQuartz when upgrading your macOS to a new major version. 
-
-
-## Data Analysis
-
-this code should pull data from csv files and analyse it/produce boxplots etc and recreate relevant parts of the figures
-returns svg files that are then used to produce figures in Adobe Illustrator
-
-The final analysis and figures presented in the manuscript were generated using R. 
-
-The analyses were conducted in the R graphical user interface (GUI):
-  - R version 4.3.1 – "Beagle Scouts"
-  - [R Statistical Software](https://www.R-project.org/)
-
+  The following steps 1-3 should be executed prior to any analysis. 
+  
   1. **Load Packages**
 
      This code will check if the relevant packages are already installed in R. If not, a prompt will appear requiring the user to select a download site for installing these repositories. This installation is only required once for new versions of R. Once/if installeed, the packages are then loaded into the current R environment.
@@ -250,6 +219,23 @@ The analyses were conducted in the R graphical user interface (GUI):
 
 
 ```
+
+Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later). 
+
+always re-install XQuartz when upgrading your macOS to a new major version. 
+
+
+## Data Analysis
+
+this code should pull data from csv files and analyse it/produce boxplots etc and recreate relevant parts of the figures
+returns svg files that are then used to produce figures in Adobe Illustrator
+
+The final analysis and figures presented in the manuscript were generated using R. 
+
+The analyses were conducted in the R graphical user interface (GUI):
+  - R version 4.3.1 – "Beagle Scouts"
+  - [R Statistical Software](https://www.R-project.org/)
+
 
 
 
