@@ -69,7 +69,7 @@ The analyses were conducted in the R graphical user interface (GUI):
    The custom functions are required to make the graphs etc.
 
 ```R
-	custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
+						custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
 	                           ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
 	                           lwd=0.8, type=6) {
 		x <- data$x
@@ -211,6 +211,17 @@ The analyses were conducted in the R graphical user interface (GUI):
 		y <- data[data$x == 2,][order(data[data$x == 2,]$s),]$y
 		wilcox.test(x, y, paired = paired, alternative=alternative, exact=exact)
 	}
+
+	# Combined function to perform the Wilcoxon Signed-Rank Test
+	wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided', exact=NULL){
+	    	# Extract data for the first group
+	    	x <- data[data$x == group1,][order(data[data$x == group1,]$s),]$y
+	    	# Extract data for the second group
+	    	y <- data[data$x == group2,][order(data[data$x == group2,]$s),]$y
+	    	# Perform the Wilcoxon Signed-Rank Test
+	    	wilcox.test(x, y, paired = paired, alternative = alternative, exact = exact)
+	}
+
 ```
 
 4. **Data Analysis**
