@@ -33,7 +33,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 
      The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
 
-     Nb, as the function `load_required_packages` checks if the packages are installed, installs them if they are not AND subsequently loads them into the current R environment, it must be run everytime analysis is performed.
+     Nb. as the function `load_required_packages` checks if the packages are installed, installs them if they are not AND subsequently loads them into the current R environment, it must be run everytime analysis is performed.
 
 
 ```R
@@ -194,7 +194,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	  	return(df)
 	}
 
-	# Perform the Wilcoxon Signed-Rank Test
+	# Wrapper to perform the Wilcoxon Signed-Rank Test etc
 	wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided', exact=NULL){
 	    	# Extract data for the first group
 	    	x <- data[data$x == group1,][order(data[data$x == group1,]$s),]$y
