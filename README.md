@@ -321,7 +321,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 	fun.wilcox(data13)
 ```
 
-	
+```R	
 	# data for figS1 
 	dataS1 <- read.csv('data14.csv')
 	colnames(dataS1) = c('A+B', 'C')
