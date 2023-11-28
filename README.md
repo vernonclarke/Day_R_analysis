@@ -139,15 +139,8 @@ The analyses were conducted in the R graphical user interface (GUI):
 		
 		# x intercept
 		cat("x intercept is ", format(-c/m), "mV", "\n")
-	
-		
-		# In the context of linear mixed models, Rsqr can be a bit more complex to define and interpret than in standard linear regression. 
-		# There are actually two commonly reported Rsqr values for linear mixed models:
-	
-		#     Marginal R2: Represents the variance explained by the fixed effects alone.	
-		#     Conditional R2: Represents the variance explained by both the fixed and random effects.
 	    
-		# use MuMIn to evaluate r2 if necessary
+		# use MuMIn to evaluate r2 
 		r2_values <- r.squaredGLMM(mod)
 		# print(r2_values)
 	        cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
