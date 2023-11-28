@@ -136,11 +136,18 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		# x intercept
 		cat("x intercept is ", format(-c/m), "mV", "\n")
 	    
+		r2_values <- R2.calculator(mod, data)
+		if (mixed){
+			cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+		}else{
+			cat("rsqr (multiple) ", format(r2_values[1]), " rsqr (adjusted) ", format(r2_values[2]))
+		}
+
 		# use MuMIn to evaluate r2 
-		r2_values <- r.squaredGLMM(mod)
+		# r2_values <- r.squaredGLMM(mod)
 
 		# print(r2_values)
-	        cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+	        # cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
 		# cat("rsqr (conditional) ", format(r2_values[2]))
 	
 		# Add a column to data for jittered x-values
@@ -168,6 +175,55 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		
 		# list(reversal=-c/m, r2_values =r2_values)	
 	}
+
+	R2.calculator <- function(mod, data) {
+	
+		# Convert the model formula to a string
+		mod_str <- deparse(mod)
+		
+		# Fit the model
+		if (grepl("\\|", mod_str)) {
+			# Model has random effects (intercepts or slopes)
+			model <- lmer(mod, data = data)
+			includeRandomEffect <- TRUE
+		} else {
+			# Model is a simple linear model
+			model <- lm(mod, data = data)
+			includeRandomEffect <- FALSE
+		}
+		
+		# Variance explained by fixed effects (sigma^2_f)
+		y_pred_fixed <- predict(model, re.form = NA)
+		varFixed <- var(y_pred_fixed)
+		
+		if (includeRandomEffect) {
+			# Variance for random effect (sigma^2_a)
+			varRandom <- sum(sapply(VarCorr(model), function(v) v[1]))
+			
+			# Residual variance (sigma^2_epsilon)
+			varResid <- sigma(model)^2
+			
+			# Calculate R-squared
+			R2_marginal <- varFixed / (varFixed + varRandom + varResid)
+			R2_conditional <- (varFixed + varRandom) / (varFixed + varRandom + varResid)
+			
+			return(list(marginal = R2_marginal, conditional = R2_conditional))
+
+		} else {
+			# For lm model, R-squared is simply the variance of the predicted values 
+			# over the total variance
+			totalVar <- var(data$y)
+			R2 <- varFixed / totalVar
+		
+			# Calculate adjusted R-squared manually
+    			n <- nrow(data)
+    			p <- length(coef(model)) - 1  # number of predictors, excluding intercept
+			adjR2 <- 1 - (1 - R2) * (n - 1) / (n - p - 1)
+
+    			return(list(R2 = R2, adjustedR2 = adjR2))
+		}
+	}
+	
 	
 	# simple function to import data from a ''csv' file
 	#  if NA is zero imports all exlcude excludes those subjects s
@@ -617,9 +673,11 @@ The boxplot.stats function calculates the hinges based on the quartiles of the d
 
 
 
-## Linear Mixed Models (LMM) R-squared Measures
+## Linear Mixed-Effect Models (LMM) R-squared Measures
 
-The model is a two-level Linear Mixed Model (LMM), suitable for datasets where the first level corresponds to observations and the second level to some grouping/clustering factor (e.g., individuals with repeated measurements). The model, referred to as Model 1, is specified as follows:
+Linear Mixed-Effects Model (LMM) is suitable for datasets where the first level corresponds to an independent (or fixed-effect) variable and the second level to some grouping/clustering factor (such as subjects with repeated measurements). 
+
+For normal/gaussian error distributions, the model is specified as follows:
 
 $$ y_{ij} = b_0 + \sum_{h=1}^{p} b_h x_{hij} + a_i + \epsilon_{ij} $$
 
@@ -633,12 +691,16 @@ where:
 
 For this model, two types of R-squared can be defined:
 
-**Marginal R-squared ($R^2_{LMM(m)}$)**:
+**Marginal R-squared or $R^2_{LMM(m)}$**:
+
 $$ R^2_{LMM(m)} = \frac{\sigma^2_f}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
+
 This represents the proportion of the total variance explained by the fixed effects.
 
-**Conditional R-squared ($R^2_{LMM(c)}$)**:
+**Conditional R-squared or $R^2_{LMM(c)}$**:
+
 $$ R^2_{LMM(c)} = \frac{\sigma^2_f + \sigma^2_a}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
+
 This represents the proportion of variance explained by both fixed and random effects.
 
 Where:
