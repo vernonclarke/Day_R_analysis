@@ -43,7 +43,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		if (length(new.packages)) install.packages(new.packages)
 		invisible(lapply(packages, library, character.only=TRUE))
 	}	  
-	required.packages <- c('MuMIn', 'svglite', 'lme4', 'Matrix')
+	required.packages <- c('MuMIn', 'svglite', 'lme4')
 	load_required_packages(required.packages) 
 ```
     
@@ -138,6 +138,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	    
 		# use MuMIn to evaluate r2 
 		r2_values <- r.squaredGLMM(mod)
+
 		# print(r2_values)
 	        cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
 		# cat("rsqr (conditional) ", format(r2_values[2]))
