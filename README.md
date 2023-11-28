@@ -364,9 +364,8 @@ Only the R console was used for analysis. It should work in `RStudio` although t
    Having run all the previous code, the following code performs the analysis and makes the graphs for all the electrophysiological experiments found in the manuscript.
 
 ```R
-	# data for fig 2
-	# import data sets from stored csv
-	
+	# Fig 2
+	# import data sets from stored csv	
 	data2F <- import.fun('data2F')
 	data1 <- data2F[, c("s", "x", "y1")]; colnames(data1)[3] <- "y"
 	data2 <- data2F[, c("s", "x", "y2")]; colnames(data2)[3] <- "y"
