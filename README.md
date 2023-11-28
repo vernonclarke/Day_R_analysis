@@ -13,17 +13,13 @@ Recreates graphical outputs and statistical analyses in the manuscript
  
 ## Initial Set Up
 
-The final analysis and figures presented in the manuscript were generated using R. 
-
 The analyses were conducted in the R graphical user interface (GUI):
-  - R version 4.3.1 – "Beagle Scouts"
+  - R version 4.3.1 – 'Beagle Scouts'
   - [R Statistical Software](https://www.R-project.org/)
 
-  ### Setting up
-  
-  Only the R console was used for analysis. 
-  
-  If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). The provided code should work although this has not been explicitly tested.
+If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
+
+Only the R console was used for analysis. It should work in `RStudio` although this has not been explicitly tested.  
   
 ## Performing Analysis
 
@@ -33,11 +29,11 @@ The analyses were conducted in the R graphical user interface (GUI):
   
   1. **Load Packages**
 
-     This code will check if the relevant packages are already installed in R. If not, a prompt will appear requiring the user to select a download site for installing these repositories. This installation is only required once for new versions of R. Once/if installeed, the packages are then loaded into the current R environment.
+     This code will check if the relevant packages are already installed in R. If not, a prompt will appear requiring the user to select a download site for installing these repositories. This installation is only required once for new versions of R. Once/if installed, the packages are then loaded into the current R environment.
 
      The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
 
-     
+     Nb, as the function `load_required_packages` checks if the packages are installed, installs them if they are not AND subsequently loads them into the current R environment, it must be run everytime analysis is performed.
 
 
 ```R
@@ -51,7 +47,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 	load_required_packages(required.packages) 
 ```
     
-2. **Initial Settings**
+2. **Set Initial Settings**
 
      - set the working directory 
 
@@ -64,7 +60,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 
      plotsave <- TRUE  
 ``` 
-3. **Required Custom-written Functions**
+3. **Load Required Custom-written Functions**
 
    The custom functions are required to make the graphs etc.
 
@@ -310,7 +306,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 
 4. **Data Analysis**
 
-   Having run all the previous code, this code performs the analysis and makes the graphs in the ms
+   Having run all the previous code, the following code performs the analysis and makes the graphs for all the electrophysiological experiments found in the manuscript.
 
 ```R
 	# data for fig 2
@@ -431,7 +427,7 @@ The analyses were conducted in the R graphical user interface (GUI):
 
 ```
 
-**To save all the figures in the same directory as the raw data:**
+5. **Save all the figures in the same directory as the raw data**
 
 ```R
 if (plotsave) {	
