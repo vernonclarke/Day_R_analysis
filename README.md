@@ -43,7 +43,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		if (length(new.packages)) install.packages(new.packages)
 		invisible(lapply(packages, library, character.only=TRUE))
 	}	  
-	required.packages <- c('MuMIn', 'svglite', 'lme4')
+	required.packages <- c('MuMIn', 'svglite', 'lme4', 'Matrix')
 	load_required_packages(required.packages) 
 ```
     
