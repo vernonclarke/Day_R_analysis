@@ -222,6 +222,104 @@ The analyses were conducted in the R graphical user interface (GUI):
 	    	wilcox.test(x, y, paired = paired, alternative = alternative, exact = exact)
 	}
 
+	# Functions for FigS1	
+	fun.plot.S1 = function(){
+		plot(dataS1$'A+B', dataS1$'C', xlab = 'linear prediction (mV)', ylab = 'actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
+	
+		# Define the points for the y=x line
+		xline = yline = seq(0, 40, 0.1)
+	
+		# Add shading below the line using polygon
+		polygon(c(0, xline, 40), c(0, yline, 0), col='lightgray', border=NA)
+	
+		# Overlay the y=x line on top of the shaded region
+		lines(xline, yline, col='black', lwd=1)
+	
+		# Replot your data points on top to ensure they're not covered by the polygon
+		points(dataS1$'A+B', dataS1$'C', pch=20, col='black')
+	}
+
+	output.fun <- function(data, type=6, MAD = FALSE){
+		unique_x <- unique(data$x)
+		out <- sapply(1:length(unique_x), function(ii){
+			current_x <- unique_x[ii]
+	        d <- data$y[data$x == current_x]
+	        
+	        q1 <- quantile(d, probs=0.25, type=type)
+	        q3 <- quantile(d, probs=0.75, type=type)
+	        iqr <- q3 - q1  # Calculate IQR
+	        
+	        lower_bound <- q1 - 1.5 * iqr  # Lower bound for outliers
+	        upper_bound <- q3 + 1.5 * iqr  # Upper bound for outliers
+	        
+	        # Exclude outliers
+	        d_filtered <- if (MAD) d else d[d >= lower_bound & d <= upper_bound] # do NOT remove outliers for MAD
+	
+	        median_val <- median(d_filtered)
+	        min_val <- min(d_filtered)
+	        max_val <- max(d_filtered)
+	        
+	        
+	        if (MAD){
+	        	mad_value <- mad(d_filtered, constant = 1)
+	        	c(min_val[[1]], median_val-mad_value, median_val, median_val+mad_value, max_val[[1]])	
+	        }else{
+	        	c(min_val[[1]], q1[[1]], median_val, q3[[1]], max_val[[1]])	
+	        }
+	                     
+	    })
+	    if (MAD){
+	    	rownames(out) <- c('min','lm','median','um','max')
+	    }else{
+	    	rownames(out) <- c('min','q1','median','q3','max')
+	    }
+	    colnames(out) = unique_x
+	    return(out)
+	}
+
+	plot_error_bars <- function(X, Y, color, lwd, xrange, yrange) {
+		x_q1 <- X[1]
+		x_median <- X[2]
+		x_q3 <- X[3]
+		
+		y_q1 <- Y[1]
+		y_median <- Y[2]
+		y_q3 <- Y[3]
+		
+		wid.x <- diff(xrange) / 50
+		wid.y <- diff(yrange) / 50
+		
+		# Plot median points
+		points(x_median, y_median, pch=19, col=color)
+		
+		# Error bars for x
+		segments(x_q1, y_median, x_q3, y_median, col=color, lwd=lwd)
+		segments(x_q1, y_median - 0.5*wid.y, x_q1, y_median + 0.5*wid.y, col=color, lwd=lwd)
+		segments(x_q3, y_median - 0.5*wid.y, x_q3, y_median + 0.5*wid.y, col=color, lwd=lwd)
+		
+		# Error bars for y
+		segments(x_median, y_q1, x_median, y_q3, col=color, lwd=lwd)
+		segments(x_median - 0.5*wid.x, y_q1, x_median + 0.5*wid.x, y_q1, col=color, lwd=lwd)
+		segments(x_median - 0.5*wid.x, y_q3, x_median + 0.5*wid.x, y_q3, col=color, lwd=lwd)	  
+	}
+
+	fun.plot2 = function(){
+		plot(NULL, xlim=xrange, ylim=yrange, xlab="x", ylab="y", type="n", bty='n')
+	
+		# Box13 Data
+		X <- box13[2:4,2]
+		Y <- box12[2:4,2]
+		plot_error_bars(X, Y, color='indianred', lwd=lwd, xrange=xrange, yrange=yrange)
+	
+		# Box12 Data
+		X <- box13[2:4,3]
+		Y <- box12[2:4,3]
+		plot_error_bars(X, Y, color='black', lwd=lwd, xrange=xrange, yrange=yrange)
+	    
+		points(data13$y[data13$x == 2], data12$y[data12$x == 2],pch=20, col='indianred')
+		points(data13$y[data13$x == 3], data12$y[data12$x == 3], pch=20, col='black')
+	}
+
 ```
 
 4. **Data Analysis**
@@ -268,8 +366,8 @@ The analyses were conducted in the R graphical user interface (GUI):
 	fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6)
 
 	# FIG2GJ: statistcal tests
-	fun.wilcox2(data6)
-	fun.wilcox2(data7)
+	wilcox.f(data=data6, group1=1, group2=2)
+	wilcox.f(data=data7, group1=1, group2=2)
 
 ```
 	
@@ -285,9 +383,8 @@ The analyses were conducted in the R graphical user interface (GUI):
 	fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
 
 	# Fig3C: statistcal tests
-	fun.wilcox2(data8)
-	fun.wilcox2(data9)
-
+	wilcox.f(data=data8,group1=1, group2=2)
+	wilcox.f(data=data9,group1=1, group2=2)
 	
 	# Fig3F
 	data3F <- import.fun('data3F')
@@ -300,10 +397,12 @@ The analyses were conducted in the R graphical user interface (GUI):
 	fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
 	
 	
-	# Fig3F: statistcal tests
-	fun.wilcox2(data10, paired = FALSE)	
-	# nb result is in fact identical (pairs go in identical directions; performing Mann U as not enough values for paired (n = 5 pairs is required)
-	fun.wilcox2(data11, paired = FALSE)
+	# Fig3F: statistcal tests; performing Mann U as not enough values for paired (n = 5 pairs is required)
+	wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
+	
+	# nb result IS, in fact, identical to the previous one (pairs go in identical directions)
+	wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
+	
 	
 ```
 
@@ -321,8 +420,8 @@ The analyses were conducted in the R graphical user interface (GUI):
 	
 	
 	# stats for Fig4E (dataset combined)
-	fun.wilcox(data12)
-	fun.wilcox(data13)
+	wilcox.f(data=data12,group1=2, group2=3)
+	wilcox.f(data=data13,group1=2, group2=3)
 ```
 
 ```R	
@@ -330,13 +429,87 @@ The analyses were conducted in the R graphical user interface (GUI):
 	dataS1 <- read.csv('data14.csv')
 	colnames(dataS1) = c('A+B', 'C')
 	
-	# plot figures
-	
+	# FigS1
+	dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
+	par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+	fun.plot.S1()
 
+		
+	# Initial settings
+	lwd = 0.8; xrange = c(0,0.25); yrange = c(0,35)
 
+	# FigS1
+	dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
+	par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+	fun.plot2()
 
 ```
 
+**To save all the figures in the same directory as the raw data:**
+
+```R
+if (plotsave) {	
+	svglite(paste0('Fig2F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
+	fun.plot(data1)
+	dev.off()
+
+	svglite(paste0('Fig2F2 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
+	fun.plot(data2)
+	dev.off()
+
+	svglite(paste0('Fig2F3 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
+	fun.plot(data3)
+	dev.off()
+
+	svglite(paste0('Fig2C_1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+	fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25))
+	dev.off()
+	
+	svglite(paste0('Fig2C_2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+	fun.plot(data5, ylab='PSC amplitude (pA)', yrange=c(-20,25))
+	dev.off()
+	
+	svglite(paste0('Fig2G ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+	fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05)
+	dev.off()
+
+	svglite(paste0('Fig2J ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+	fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05)
+	dev.off()
+
+	svglite(paste0('Fig3C1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+	fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
+	dev.off()
+
+	svglite(paste0('Fig3C2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+	fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
+	dev.off()
+
+	svglite(paste0('Fig3F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+	fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
+	dev.off()
+
+	svglite(paste0('Fig3F2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+	fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
+	dev.off()
+
+	svglite(paste0('Fig4E1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+	fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6)
+	dev.off()
+	
+	svglite(paste0('Fig4E2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+	fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6)
+	dev.off()
+	
+	svglite(paste0('Fig4E3 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.50, pointsize=10)
+	fun.plot2()
+	dev.off()
+	
+	svglite(paste0('FigS1 ', gsub(':', '-', Sys.time()), '.svg'), width=3.25,height=3.70, pointsize=10)
+	fun.plot.S1()
+	dev.off()
+}
+```	
 
 
 
