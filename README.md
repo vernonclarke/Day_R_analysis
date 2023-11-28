@@ -43,7 +43,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		if (length(new.packages)) install.packages(new.packages)
 		invisible(lapply(packages, library, character.only=TRUE))
 	}	  
-	required.packages <- c('MuMIn', 'svglite', 'lme4')
+	required.packages <- c('svglite', 'lme4')
 	load_required_packages(required.packages) 
 ```
     
@@ -57,7 +57,6 @@ Only the R console was used for analysis. It should work in `RStudio` although t
      mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
      wd <- paste0(getwd(), mypath)
      setwd(wd)
-
      plotsave <- TRUE  
 ``` 
 3. **Load Required Custom-written Functions**
@@ -109,7 +108,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		isSingular(mod)
 		} 
 		
-	fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6){
+	fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){
 		
 		# Fit the model using lmer
 		# model_lmer <- lmer(y ~ x + (1|s))
@@ -120,9 +119,6 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		mixed <- !isSingular.fun(formula, data)
 		mod <-  if (mixed) lmer(y ~ x + (1|s)) else lm(y ~ x)
 		formula <- if (!mixed) y ~ x else formula
-		cat("model is ", format(formula), "\n")
-		print(summary(mod))
-	
 		if (mixed){
 			fixed_effects <- fixef(mod)
 			m <- fixed_effects[[2]]
@@ -132,24 +128,22 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 			m <- coeffs[[2]]
 			c <- coeffs[[1]]
 		}
+		r2_values <- R2.calculator(formula, data)
 		
-		# x intercept
-		cat("x intercept is ", format(-c/m), "mV", "\n")
-	    
-		r2_values <- R2.calculator(mod, data)
-		if (mixed){
-			cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
-		}else{
-			cat("rsqr (multiple) ", format(r2_values[1]), " rsqr (adjusted) ", format(r2_values[2]))
-		}
-
-		# use MuMIn to evaluate r2 
-		# r2_values <- r.squaredGLMM(mod)
-
-		# print(r2_values)
-	        # cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
-		# cat("rsqr (conditional) ", format(r2_values[2]))
+		if (!silent){
+			cat("model is ", format(formula), "\n")
 	
+			print(summary(mod))
+	
+			# x intercept
+			cat("x intercept is ", format(-c/m), "mV", "\n")
+		    
+			if (mixed){
+				cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+			}else{
+				cat("rsqr (multiple) ", format(r2_values[1]), " rsqr (adjusted) ", format(r2_values[2]))
+			}
+		}
 		# Add a column to data for jittered x-values
 		set.seed(42)
 		data$x_jitter <- jitter(data$x, amount=amount)
@@ -168,27 +162,29 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 			}
 		}
 		
-		# Predict y values using the model for new data with matching grouping factor levels
-		y_pred <- m * unique(x) + c
-		# Add the line of best fit
-		lines(unique(x), y_pred, col="black", lwd=lwd, lty=1)
+		if (regression){
+			# Predict y values using the model for new data with matching grouping factor levels
+			y_pred <- m * unique(x) + c
+			# Add the line of best fit
+			lines(unique(x), y_pred, col="black", lwd=lwd, lty=1)
+		}
 		
 		# list(reversal=-c/m, r2_values =r2_values)	
 	}
-
-	R2.calculator <- function(mod, data) {
+	
+	R2.calculator <- function(formula, data) {
 	
 		# Convert the model formula to a string
-		mod_str <- deparse(mod)
+		formula_str <- deparse(formula)
 		
 		# Fit the model
-		if (grepl("\\|", mod_str)) {
+		if (grepl("\\|", formula_str)) {
 			# Model has random effects (intercepts or slopes)
-			model <- lmer(mod, data = data)
+			model <- lmer(formula, data = data)
 			includeRandomEffect <- TRUE
 		} else {
 			# Model is a simple linear model
-			model <- lm(mod, data = data)
+			model <- lm(formula, data = data)
 			includeRandomEffect <- FALSE
 		}
 		
@@ -208,7 +204,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 			R2_conditional <- (varFixed + varRandom) / (varFixed + varRandom + varResid)
 			
 			return(list(marginal = R2_marginal, conditional = R2_conditional))
-
+	
 		} else {
 			# For lm model, R-squared is simply the variance of the predicted values 
 			# over the total variance
@@ -216,11 +212,11 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 			R2 <- varFixed / totalVar
 		
 			# Calculate adjusted R-squared manually
-    			n <- nrow(data)
-    			p <- length(coef(model)) - 1  # number of predictors, excluding intercept
+	  			n <- nrow(data)
+	  			p <- length(coef(model)) - 1  # number of predictors, excluding intercept
 			adjR2 <- 1 - (1 - R2) * (n - 1) / (n - p - 1)
-
-    			return(list(R2 = R2, adjustedR2 = adjR2))
+	
+	  			return(list(R2 = R2, adjustedR2 = adjR2))
 		}
 	}
 	
@@ -250,7 +246,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	  	colnames(df) <- c(fixed_colnames, y_colnames)
 	  	return(df)
 	}
-
+	
 	# Wrapper to perform the Wilcoxon Signed-Rank Test etc
 	wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided', exact=NULL){
 	    	# Extract data for the first group
@@ -260,7 +256,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	    	# Perform the Wilcoxon Signed-Rank Test
 	    	wilcox.test(x, y, paired = paired, alternative = alternative, exact = exact)
 	}
-
+	
 	# Functions for FigS1	
 	fun.plot.S1 = function(){
 		plot(dataS1$'A+B', dataS1$'C', xlab = 'linear prediction (mV)', ylab = 'actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
@@ -277,7 +273,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		# Replot your data points on top to ensure they're not covered by the polygon
 		points(dataS1$'A+B', dataS1$'C', pch=20, col='black')
 	}
-
+	
 	output.fun <- function(data, type=6, MAD = FALSE){
 		unique_x <- unique(data$x)
 		out <- sapply(1:length(unique_x), function(ii){
@@ -315,7 +311,7 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	    colnames(out) = unique_x
 	    return(out)
 	}
-
+	
 	plot_error_bars <- function(X, Y, color, lwd, xrange, yrange) {
 		x_q1 <- X[1]
 		x_median <- X[2]
@@ -341,9 +337,12 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		segments(x_median - 0.5*wid.x, y_q1, x_median + 0.5*wid.x, y_q1, col=color, lwd=lwd)
 		segments(x_median - 0.5*wid.x, y_q3, x_median + 0.5*wid.x, y_q3, col=color, lwd=lwd)	  
 	}
-
-	fun.plot2 = function(){
+	
+	fun.plot2 = function(data12, data13){
 		plot(NULL, xlim=xrange, ylim=yrange, xlab="x", ylab="y", type="n", bty='n')
+	
+		box12 <- output.fun(data12, MAD=TRUE)
+		box13 <- output.fun(data13, MAD=TRUE)
 	
 		# Box13 Data
 		X <- box13[2:4,2]
@@ -358,7 +357,6 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 		points(data13$y[data13$x == 2], data12$y[data12$x == 2],pch=20, col='indianred')
 		points(data13$y[data13$x == 3], data12$y[data12$x == 3], pch=20, col='black')
 	}
-
 ```
 
 4. **Data Analysis**
@@ -380,30 +378,30 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	
 	data6 <- import.fun('data2G')
 	data7 <- import.fun('data2J')
-
+	
 	# FIG2C
 	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 	fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
-
+	
 	fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
-
+	
 	# FIG2F
 	dev.new(width=9 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 	fun.plot(data1, p.cex=0.6)
-
+	
 	fun.plot(data2, p.cex=0.6)
-
+	
 	fun.plot(data3, p.cex=0.6)
-
+	
 	# FIG2GJ
 	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
-	fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6)
-
-	fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6)
-
+	fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+	
+	fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+	
 	# FIG2GJ: statistcal tests
 	wilcox.f(data=data6, group1=1, group2=2)
 	wilcox.f(data=data7, group1=1, group2=2)
@@ -414,13 +412,13 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	# Fig3C
 	data8 <- import.fun('data3CA')
 	data9 <- import.fun('data3CB')
-
+	
 	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
-	fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-
-	fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-
+	fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+	
+	fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+	
 	# Fig3C: statistcal tests
 	wilcox.f(data=data8,group1=1, group2=2)
 	wilcox.f(data=data9,group1=1, group2=2)
@@ -429,20 +427,19 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	data3F <- import.fun('data3F')
 	data10 <- data3F[, c("s", "x", "y1")]; colnames(data10)[3] <- "y"
 	data11 <- data3F[, c("s", "x", "y2")]; colnames(data11)[3] <- "y"
-
+	
 	dev.new(width=6 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
-	fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-	fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
+	fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+	fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 	
 	
 	# Fig3F: statistcal tests; performing Mann U as not enough values for paired (n = 5 pairs is required)
 	wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
 	
-	# nb result IS, in fact, identical to the previous one (pairs go in identical directions)
+	# nb result IS, in fact, identical to the previous one (simply because pairs in data10 and data11 go in identical directions)
 	wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
-	
-	
+
 ```
 
  
@@ -451,12 +448,11 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	data4E <- import.fun('data12')
 	data12 <- data4E[, c("s", "x", "y1")]; colnames(data12)[3] <- "y"
 	data13 <- data4E[, c("s", "x", "y2")]; colnames(data13)[3] <- "y"
-
+	
 	dev.new(width=9 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
-	fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6)
-	fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6)
-	
+	fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
+	fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 	
 	# stats for Fig4E (dataset combined)
 	wilcox.f(data=data12,group1=2, group2=3)
@@ -472,82 +468,81 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 	dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 	fun.plot.S1()
-
+	
 		
 	# Initial settings
 	lwd = 0.8; xrange = c(0,0.25); yrange = c(0,35)
-
+	
 	# FigS1
 	dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
 	par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
-	fun.plot2()
-
+	fun.plot2(data12, data13)
 ```
 
 5. **Save all the figures in the same directory as the raw data**
 
 ```R
-if (plotsave) {	
-	svglite(paste0('Fig2F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
-	fun.plot(data1)
-	dev.off()
-
-	svglite(paste0('Fig2F2 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
-	fun.plot(data2)
-	dev.off()
-
-	svglite(paste0('Fig2F3 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
-	fun.plot(data3)
-	dev.off()
-
-	svglite(paste0('Fig2C_1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
-	fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25))
-	dev.off()
+	if (plotsave) {	
+		svglite(paste0('Fig2F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
+		fun.plot(data1, silent=TRUE)
+		dev.off()
 	
-	svglite(paste0('Fig2C_2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
-	fun.plot(data5, ylab='PSC amplitude (pA)', yrange=c(-20,25))
-	dev.off()
+		svglite(paste0('Fig2F2 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
+		fun.plot(data2, silent=TRUE)
+		dev.off()
 	
-	svglite(paste0('Fig2G ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
-	fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05)
-	dev.off()
-
-	svglite(paste0('Fig2J ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
-	fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05)
-	dev.off()
-
-	svglite(paste0('Fig3C1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
-	fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-	dev.off()
-
-	svglite(paste0('Fig3C2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
-	fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-	dev.off()
-
-	svglite(paste0('Fig3F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
-	fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-	dev.off()
-
-	svglite(paste0('Fig3F2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
-	fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6)
-	dev.off()
-
-	svglite(paste0('Fig4E1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
-	fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6)
-	dev.off()
+		svglite(paste0('Fig2F3 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
+		fun.plot(data3, silent=TRUE)
+		dev.off()
 	
-	svglite(paste0('Fig4E2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
-	fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6)
-	dev.off()
+		svglite(paste0('Fig2C_1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+		fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), silent=TRUE)
+		dev.off()
+		
+		svglite(paste0('Fig2C_2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+		fun.plot(data5, ylab='PSC amplitude (pA)', yrange=c(-20,25), silent=TRUE)
+		dev.off()
+		
+		svglite(paste0('Fig2G ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+		fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, regression=FALSE, silent=TRUE)
+		dev.off()
 	
-	svglite(paste0('Fig4E3 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.50, pointsize=10)
-	fun.plot2()
-	dev.off()
+		svglite(paste0('Fig2J ', gsub(':', '-', Sys.time()), '.svg'), width=2.5,height=2.75, pointsize=10)
+		fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, regression=FALSE, silent=TRUE)
+		dev.off()
 	
-	svglite(paste0('FigS1 ', gsub(':', '-', Sys.time()), '.svg'), width=3.25,height=3.70, pointsize=10)
-	fun.plot.S1()
-	dev.off()
-}
+		svglite(paste0('Fig3C1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+		fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+		dev.off()
+	
+		svglite(paste0('Fig3C2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+		fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+		dev.off()
+	
+		svglite(paste0('Fig3F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+		fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+		dev.off()
+	
+		svglite(paste0('Fig3F2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+		fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
+		dev.off()
+	
+		svglite(paste0('Fig4E1 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+		fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
+		dev.off()
+		
+		svglite(paste0('Fig4E2 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
+		fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
+		dev.off()
+		
+		svglite(paste0('Fig4E3 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.50, pointsize=10)
+		fun.plot2(data12, data13)
+		dev.off()
+		
+		svglite(paste0('FigS1 ', gsub(':', '-', Sys.time()), '.svg'), width=3.25,height=3.70, pointsize=10)
+		fun.plot.S1()
+		dev.off()
+	}
 ```	
 
 
