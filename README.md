@@ -199,20 +199,6 @@ The analyses were conducted in the R graphical user interface (GUI):
 	}
 
 	# Perform the Wilcoxon Signed-Rank Test
-	fun.wilcox <- function(data, paired=TRUE, alternative='two.sided', exact=NULL){
-		x <- data[data$x == 2,][order(data[data$x == 2,]$s),]$y
-		y <- data[data$x == 3,][order(data[data$x == 3,]$s),]$y
-		wilcox.test(x, y, paired = paired, alternative=alternative, exact=exact)
-	}
-
-	# Perform the Wilcoxon Signed-Rank Test
-	fun.wilcox2 <- function(data, paired=TRUE, alternative='two.sided', exact=NULL){
-		x <- data[data$x == 1,][order(data[data$x == 1,]$s),]$y
-		y <- data[data$x == 2,][order(data[data$x == 2,]$s),]$y
-		wilcox.test(x, y, paired = paired, alternative=alternative, exact=exact)
-	}
-
-	# Combined function to perform the Wilcoxon Signed-Rank Test
 	wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided', exact=NULL){
 	    	# Extract data for the first group
 	    	x <- data[data$x == group1,][order(data[data$x == group1,]$s),]$y
