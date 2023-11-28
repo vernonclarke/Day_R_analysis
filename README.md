@@ -617,6 +617,34 @@ The boxplot.stats function calculates the hinges based on the quartiles of the d
 
 
 
+## Linear Mixed Models (LMM) R-squared Measures
+
+The model is a two-level Linear Mixed Model (LMM), suitable for datasets where the first level corresponds to observations and the second level to some grouping/clustering factor (e.g., individuals with repeated measurements). The model, referred to as Model 1, is specified as follows:
+
+$$ y_{ij} = b_0 + \sum_{h=1}^{p} b_h x_{hij} + a_i + \epsilon_{ij} $$
+
+where:
+- $y_{ij}$ is the $j$th observation of the $i$th individual.
+- $b_0$ is the intercept (or grand mean).
+- $b_h$ is the fixed effect coefficient for the $h$th predictor.
+- $x_{hij}$ is the $j$th value for the $i$th individual for the $h$th predictor.
+- $a_i$ is an individual-specific effect, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_a$.
+- $\epsilon_{ij}$ is an observation-specific residual, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_\epsilon$.
+
+For this model, two types of R-squared can be defined:
+
+**Marginal R-squared ($R^2_{LMM(m)}$)**:
+$$ R^2_{LMM(m)} = \frac{\sigma^2_f}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
+This represents the proportion of the total variance explained by the fixed effects.
+
+**Conditional R-squared ($R^2_{LMM(c)}$)**:
+$$ R^2_{LMM(c)} = \frac{\sigma^2_f + \sigma^2_a}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
+This represents the proportion of variance explained by both fixed and random effects.
+
+Where:
+- $\sigma^2_f$ is the variance explained by fixed effects, calculated as $\text{var} \left( \sum_{h} b_h x_{hij} \right)$.
+
+
 
 
 
