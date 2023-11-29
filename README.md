@@ -636,7 +636,9 @@ If fits of **y ~ x + (1|s)** are singular, the function simplifies the model to 
 
 The function `R2.calculator` calculates the appropriate value of $R^2$.
 
-In the context of linear mixed-effect models, $R^2$ can be a bit more complex to define and interpret than in standard linear regression. There are actually two commonly reported $R^2$ values for linear mixed models:
+In the context of linear mixed-effect models, $R^2$ can be a bit more complex to define and interpret than in standard linear regression. 
+
+There are actually two commonly reported $R^2$ values for linear mixed models:
 	
 1. Marginal $R^2$: Represents the variance explained by the fixed effects alone.
 2. Conditional $R^2$: Represents the variance explained by both the fixed and random effects.
@@ -684,13 +686,17 @@ In cases where the fit reverts to linear regression (i.e. linear mixed-effect fi
 
 $$ R^2_{LM} = \frac{\sigma^2_f}{\sigma^2_t} $$
 
-where $\sigma^2_f$ is the variance of the fitted (predicted) values and $\sigma^2_t$ is the total variance of the response variable ($y$). This represents the proportion of the total variance in the response variable that is explained by the linear model.
+where $\sigma^2_f$ is the variance of the fitted (predicted) values and $\sigma^2_t$ is the total variance of the response variable ($y$). 
+
+This represents the proportion of the total variance in the response variable that is explained by the linear model.
 
 **Adjusted $R^2$ for Linear Model or $R^2_{adj, LM}$**:
 
 $$ R^2_{adj, LM} = 1 - \left( \frac{(1 - R^2_{LM}) \times (n - 1)}{n - p - 1} \right) $$
 
-where $R^2_{LM}$ is the $R^2$ for the linear model, $n$ is the number of observations, and $p$ is the number of predictors excluding the intercept. Adjusted R-squared accounts for the number of predictors in the model and provides a more adjusted measure of the model's explanatory power, especially useful when comparing models with different numbers of predictors.
+where $R^2_{LM}$ is the $R^2$ for the linear model, $n$ is the number of observations, and $p$ is the number of predictors excluding the intercept. 
+
+Adjusted R-squared accounts for the number of predictors in the model and provides a more adjusted measure of the model's explanatory power, especially useful when comparing models with different numbers of predictors.
 
 
 
