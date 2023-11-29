@@ -434,7 +434,6 @@ wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
 ```
 ```R
 # simple eg to illustrate why p values in Fig3F are identical:
-
 test1 <- data11
 # Set a seed for reproducibility
 set.seed(42) 
@@ -466,7 +465,6 @@ wilcox.f(data=data13,group1=2, group2=3)
 
 ```R
 # simple eg to illustrate why p values in Fig4EF are identical:
-
 test2 <- data12
 # Replace y with numbers generated from a normal distribution
 set.seed(42) # for reproducibility
