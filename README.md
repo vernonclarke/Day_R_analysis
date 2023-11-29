@@ -12,11 +12,9 @@ Recreates graphical outputs and statistical analyses in the manuscript
  
 ## Initial Set Up
 
-The analyses were conducted in the R graphical user interface (GUI):
-  - R version 4.3.1 – 'Beagle Scouts'
-  - [R Statistical Software](https://www.R-project.org/)
+The analyses were conducted in the R graphical user interface (GUI): R version 4.3.1 – 'Beagle Scouts'. 
 
-If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
+R can be downloaded [here](https://www.R-project.org/). If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
 
 Only the R console was used for analysis. It should work in `RStudio` although this has not been explicitly tested.  
   
@@ -48,9 +46,8 @@ load_required_packages(required.packages)
     
 2. **Set Initial Settings**
 
-     - set the working directory 
-
-     - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
+ - set the working directory
+ - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
 
 ```R
 mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
@@ -566,23 +563,23 @@ Any outliers are removed and the default setting for calculating the quartiles i
 
 In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
 
-Type 1: Inverse of empirical distribution function.
+- Type 1: Inverse of empirical distribution function.
 
-Type 2: Similar to type 1 but with averaging at discontinuities.
+- Type 2: Similar to type 1 but with averaging at discontinuities.
 
-Type 3: SAS definition: nearest even order statistic.
+- Type 3: SAS definition: nearest even order statistic.
 
-Type 4: Linear interpolation of the empirical cdf.
+- Type 4: Linear interpolation of the empirical cdf.
 
-Type 5: Piecewise linear function where the knots are the values of order statistics.
+- Type 5: Piecewise linear function where the knots are the values of order statistics.
 
-Type 6: Linear interpolation of the expectations based on the order statistics (default).
+- Type 6: Linear interpolation of the expectations based on the order statistics (default).
 
-Type 7: Linear interpolation of the modes based on the order statistics.
+- Type 7: Linear interpolation of the modes based on the order statistics.
 
-Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
+- Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
 
-Type 9: Linear interpolation of the approximate medians for order statistics.   
+- Type 9: Linear interpolation of the approximate medians for order statistics.   
 
 
 NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
@@ -603,11 +600,13 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 
 ### Summary
 
-**The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
+- **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
 
-**The function `custom_boxplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
+- **The function `custom_boxplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
 
-**The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`; for results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
+- **The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`**
+
+- **For results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
 
 ### Random Mixed Effects Model
 
