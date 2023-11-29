@@ -372,14 +372,14 @@ data6 <- import.fun('data2G')
 data7 <- import.fun('data2J')
 
 # FIG2C
-dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+dev.new(width=6 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
 
 fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
 
 # FIG2F
-dev.new(width=9 ,height=4,noRStudioGD=TRUE)
+dev.new(width=9 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot(data1, p.cex=0.6)
 
@@ -388,7 +388,7 @@ fun.plot(data2, p.cex=0.6)
 fun.plot(data3, p.cex=0.6)
 
 # FIG2GJ
-dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+dev.new(width=6 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
@@ -404,7 +404,7 @@ wilcox.f(data=data7, group1=1, group2=2)
 data8 <- import.fun('data3CA')
 data9 <- import.fun('data3CB')
 
-dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+dev.new(width=6 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
@@ -419,7 +419,7 @@ data3F <- import.fun('data3F')
 data10 <- data3F[, c("s", "x", "y1")]; colnames(data10)[3] <- "y"
 data11 <- data3F[, c("s", "x", "y2")]; colnames(data11)[3] <- "y"
 
-dev.new(width=6 ,height=4,noRStudioGD=TRUE)
+dev.new(width=6 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
@@ -453,7 +453,7 @@ data4E <- import.fun('data12')
 data12 <- data4E[, c("s", "x", "y1")]; colnames(data12)[3] <- "y"
 data13 <- data4E[, c("s", "x", "y2")]; colnames(data13)[3] <- "y"
 
-dev.new(width=9 ,height=4,noRStudioGD=TRUE)
+dev.new(width=9 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
