@@ -48,9 +48,8 @@ load_required_packages(required.packages)
     
 2. **Set Initial Settings**
 
-     - set the working directory 
-
-     - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
+ - set the working directory
+ - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
 
 ```R
 mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
