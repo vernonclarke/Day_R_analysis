@@ -14,9 +14,7 @@ load_required_packages <- function(packages){
 }	  
 required.packages <- c('svglite', 'lme4')
 load_required_packages(required.packages) 
-
 ##############################################################################################################
-
 # set the working directory
 mypath <- '/documents/Repositories/Day_R_analysis/figs and csv files' 
 wd <- paste0(getwd(), mypath)
@@ -24,9 +22,7 @@ setwd(wd)
 
 # saving graphs: if plotsave <- TRUE then any generated graphs are saved as svgs into working folder
 plotsave <- TRUE  
-
 ##############################################################################################################
-
 # Custom functions
 custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
 ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
@@ -321,7 +317,6 @@ fun.plot2 = function(data12, data13){
 	points(data13$y[data13$x == 2], data12$y[data12$x == 2],pch=20, col='indianred')
 	points(data13$y[data13$x == 3], data12$y[data12$x == 3], pch=20, col='black')
 }
-
 ##############################################################################################################
 # Fig 2
 # import data sets from stored csv
@@ -508,7 +503,6 @@ wilcox.f(data=data7, group1=1, group2=2)
 # Warning message:
 # In wilcox.test.default(x, y, paired = paired, alternative = alternative,  :
 #   cannot compute exact p-value with ties
-
 ##############################################################################################################
 # Fig3C
 data8 <- import.fun('data3CA')
@@ -566,8 +560,6 @@ wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
 # data:  x and y
 # W = 16, p-value = 0.02857
 # alternative hypothesis: true location shift is not equal to 0
-
-
 ##############################################################################################################
 # Fig4EF 
 data4E <- import.fun('data12')
@@ -599,8 +591,6 @@ wilcox.f(data=data13,group1=2, group2=3)
 # Warning message:
 # In wilcox.test.default(x, y, paired = paired, alternative = alternative,  :
 #   cannot compute exact p-value with ties
-
-
 ##############################################################################################################
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
@@ -619,8 +609,6 @@ lwd = 0.8; xrange = c(0,0.25); yrange = c(0,35)
 dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot2(data12, data13)
-
-
 ##############################################################################################################
 if (plotsave) {	
 	svglite(paste0('Fig2F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
