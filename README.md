@@ -8,7 +8,7 @@ Recreates graphical outputs and statistical analyses in the manuscript
 
 - [Functions](#functions)
   - [custom_boxplot](#custom_boxplot)
-  - [R2.calculator](#r2.calculator)
+  - [R2.calculator](#R2.calculator)
  
 ## Initial Set Up
 
