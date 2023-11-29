@@ -660,7 +660,7 @@ where:
 - $b_0$ is the intercept (or grand mean).
 - $b_h$ is the fixed effect coefficient for the $h^{th}$ predictor.
 - $x_{hij}$ is the $j^{th}$ value for the $i^{th}$ subject for the $h^{th}$ predictor.
-- $a_i$ is an individual-specific effect, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_a$.
+- $a_i$ is an subject-specific effect, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_a$.
 - $\epsilon_{ij}$ is an observation-specific residual, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_\epsilon$.
 
 For this model, two types of $R^2$ can be defined:
