@@ -659,7 +659,7 @@ where:
 - $y_{ij}$ is the $j$th observation of the $i$th individual.
 - $b_0$ is the intercept (or grand mean).
 - $b_h$ is the fixed effect coefficient for the $h$th predictor.
-- $x_{hij}$ is the $j$th value for the $i$th individual for the $h$th predictor.
+- $x_{hij}$ is the $j_{th}$ value for the $i_{th}$ individual for the $h_{th}$ predictor.
 - $a_i$ is an individual-specific effect, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_a$.
 - $\epsilon_{ij}$ is an observation-specific residual, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_\epsilon$.
 
