@@ -1,6 +1,9 @@
 ### R analysis for Day et al., 2023
 
-Recreates graphical outputs and statistical analyses in the manuscript 
+Recreates graphical outputs and statistical analyses in the manuscript:
+
+Day M., Belal M., Surmeier W. C., Melendez A., Wokosin, D., Tkatch T., Clarke V. R. J. and Surmeier D. J.
+State-dependent GABAergic regulation of striatal spiny projection neuron excitability (2023)
 
 ## Table of Contents
 - [Initial Set Up](#initial-set-up)
