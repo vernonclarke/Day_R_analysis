@@ -661,7 +661,7 @@ if (plotsave) {
 	fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.3, cap=0.15, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 	dev.off()
 	
-	svglite(paste0('Fig4E3 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.50, pointsize=10)
+	svglite(paste0('Fig4E3 ', gsub(':', '-', Sys.time()), '.svg'), width=2.2,height=3.70, pointsize=10)
 	fun.plot2(data12, data13)
 	dev.off()
 	
