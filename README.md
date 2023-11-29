@@ -16,7 +16,7 @@ The analyses were conducted in the R graphical user interface (GUI): R version 4
 
 R can be downloaded [here](https://www.R-project.org/). If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
 
-Only the R console was used for analysis. It should work in `RStudio` although this has not been explicitly tested.  
+Only the R console was used for analysis. This code should work in `RStudio` although this has not been explicitly tested.  
   
 ## Performing Analysis
 
