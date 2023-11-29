@@ -716,7 +716,7 @@ Adjusted R-squared accounts for the number of predictors in the model and provid
 
 [Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination Rsqr and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
 
-[R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.](https://www.R-project.org/)
+[R Core Team (2023). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.](https://www.R-project.org/)
 
 [Wickham H, Henry L, Pedersen T, Luciani T, Decorde M, Lise V (2023). _svglite: An 'SVG' Graphics Device_. R package version 2.1.2.](https://CRAN.R-project.org/package=svglite)
 
