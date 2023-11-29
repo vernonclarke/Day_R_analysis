@@ -4,6 +4,8 @@
 # This installation is only required once for new versions of R. 
 # Once/if installed, the packages are then loaded into the current R environment.
 
+# The output from running each analysis is included (as commented out code after the routines that generated it.
+
 rm( list=ls(all=TRUE ) )
 load_required_packages <- function(packages){
 	new.packages <- packages[!(packages %in% installed.packages()[,'Package'])]
