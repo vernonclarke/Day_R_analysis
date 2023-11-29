@@ -1,4 +1,4 @@
-### R analysis for Day et al., 2023
+## R analysis for Day et al., 2023
 
 Recreates graphical outputs and statistical analyses in the manuscript:
 
