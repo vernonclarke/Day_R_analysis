@@ -31,20 +31,20 @@ Only the R console was used for analysis. It should work in `RStudio` although t
 
      This code will check if the relevant packages are already installed in R. If not, a prompt will appear requiring the user to select a download site for installing these repositories. This installation is only required once for new versions of R. Once/if installed, the packages are then loaded into the current R environment.
 
-     The required packages are [`MuMIn`](https://cran.r-project.org/web/packages/MuMIn/index.html), [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
+     The required packages are [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
 
      Nb. as the function `load_required_packages` checks if the packages are installed, installs them if they are not AND subsequently loads them into the current R environment, it must be run everytime analysis is performed.
 
 
 ```R
-	rm( list=ls(all=TRUE ) )
-	load_required_packages <- function(packages){
-		new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
-		if (length(new.packages)) install.packages(new.packages)
-		invisible(lapply(packages, library, character.only=TRUE))
-	}	  
-	required.packages <- c('svglite', 'lme4')
-	load_required_packages(required.packages) 
+rm( list=ls(all=TRUE ) )
+load_required_packages <- function(packages){
+	new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+	if (length(new.packages)) install.packages(new.packages)
+	invisible(lapply(packages, library, character.only=TRUE))
+}	  
+required.packages <- c('svglite', 'lme4')
+load_required_packages(required.packages) 
 ```
     
 2. **Set Initial Settings**
@@ -54,20 +54,14 @@ Only the R console was used for analysis. It should work in `RStudio` although t
      - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
 
 ```R
-     mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
-     wd <- paste0(getwd(), mypath)
-     setwd(wd)
-     plotsave <- TRUE  
+mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
+wd <- paste0(getwd(), mypath)
+setwd(wd)
+plotsave <- TRUE  
 ``` 
-3. **Load Required Custom-written Functions**
-
-<<<<<<< HEAD
-     plotsave <- TRUE  
-     ``` 
 3. **Required Custom Functions**
-=======
-   The custom functions are required to make the graphs etc.
->>>>>>> 0d5223f53b40d73c741d6fefadfc094367dc635e
+   
+   These custom-written functions are required to make the graphs etc.
 
 ```R
 custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
@@ -616,9 +610,10 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 
 **The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`; for results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
 
+### Random Mixed Effects Model
+
 **Linear Regression** is performed using the package `lmer`. The function determines whether the fit of the model is singular. If not then it fits by random mixed effects model. In `lmer` terminology, the formula for this is **y ~ x + (1|s)**. This formula specifies how the dependent variable 'y' is modeled in relation to the independent (or fixed-effect) predictor variable 'x' and the random effect of the subject 's'. 
 
-### Random Mixed Effects Model
 **y ~ x + (1|s)**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s. 
 
 1. y: This is the dependent variable you are trying to model or predict.
@@ -626,13 +621,6 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 3. x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
 4. +: The plus sign indicates that you are including more terms in the model.
 5. (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
-
-In the context of linear mixed models, $R^2$ can be a bit more complex to define and interpret than in standard linear regression. There are actually two commonly reported $R^2$ values for linear mixed models:
-	
-1. Marginal $R^2$: Represents the variance explained by the fixed effects alone.
-2. Conditional $R^2$: Represents the variance explained by both the fixed and random effects.
-
-The conditional $R^2$ is always equal to or larger than the marginal $R^2$ since it also includes the variance explained by the random effects.
 
 ### Linear Model
 **y ~ x**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x. 
@@ -645,9 +633,70 @@ Fits to the random mixed effects model may be singular if:
 
 If fits of **y ~ x + (1|s)** are singular, the function simplifies the model to linear regression **y ~ x**.
 
-The returned values for conditional $R^2$ and marginal $R^2$ are the same in a linear model since the two definitions effectively converge to a common value. 
+### R2.calculator
 
-The linear model only includes fixed effects and there are no random effects to consider. Therefore, the variance explained by the fixed effects (marginal $R^2$ ) is the total variance explained by the model (and is usually just referred to as $R^2$).
+The function `R2.calculator` calculates the appropriate value of $R^2$.
+
+In the context of linear mixed-effect models, $R^2$ can be a bit more complex to define and interpret than in standard linear regression. There are actually two commonly reported $R^2$ values for linear mixed models:
+	
+1. Marginal $R^2$: Represents the variance explained by the fixed effects alone.
+2. Conditional $R^2$: Represents the variance explained by both the fixed and random effects.
+
+The conditional $R^2$ is always equal to or larger than the marginal $R^2$ since it also includes the variance explained by the random effects.
+
+The method for calculating $R^2$ in linear mixed-effect models is based on the method of [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213). 
+
+It is suitable for datasets where the first level corresponds to an independent (or fixed-effect) variable and the second level to some grouping/clustering factor (such as subjects with repeated measurements). 
+
+The following is adapted from [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213):
+
+For normal/gaussian error distributions, the model is specified as follows:
+
+$$ y_{ij} = b_0 + \sum_{h=1}^{p} b_h x_{hij} + a_i + \epsilon_{ij} $$
+
+where:
+- $y_{ij}$ is the $j$th observation of the $i$th individual.
+- $b_0$ is the intercept (or grand mean).
+- $b_h$ is the fixed effect coefficient for the $h$th predictor.
+- $x_{hij}$ is the $j$th value for the $i$th individual for the $h$th predictor.
+- $a_i$ is an individual-specific effect, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_a$.
+- $\epsilon_{ij}$ is an observation-specific residual, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_\epsilon$.
+
+For this model, two types of $R^2$ can be defined:
+
+**Marginal $R^2$ or $R^2_{LMM(m)}$**:
+
+$$ R^2_{LMM(m)} = \frac{\sigma^2_f}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
+
+This represents the proportion of the total variance explained by the fixed effects.
+
+**Conditional $R^2$ or $R^2_{LMM(c)}$**:
+
+$$ R^2_{LMM(c)} = \frac{\sigma^2_f + \sigma^2_a}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
+
+This represents the proportion of variance explained by both fixed and random effects.
+
+Where:
+- $\sigma^2_f$ is the variance explained by fixed effects, calculated as $\text{var} \left( \sum_{h} b_h x_{hij} \right)$.
+
+In cases where the fit reverts to linear regression (i.e. linear mixed-effect fits of **y ~ x + (1|s)** are singular), this function returns the standard value of $R^2$ and the adjusted value $R^2_{adj}$.
+
+**$R^2$ for Linear Model or $R^2_{LM}$**:
+
+$$ R^2_{LM} = \frac{\sigma^2_f}{\sigma^2_t} $$
+
+where $\sigma^2_f$ is the variance of the fitted (predicted) values and $\sigma^2_t$ is the total variance of the response variable ($y$). This represents the proportion of the total variance in the response variable that is explained by the linear model.
+
+**Adjusted $R^2$ for Linear Model or $R^2_{adj, LM}$**:
+
+$$ R^2_{adj, LM} = 1 - \left( \frac{(1 - R^2_{LM}) \times (n - 1)}{n - p - 1} \right) $$
+
+where $R^2_{LM}$ is the $R^2$ for the linear model, $n$ is the number of observations, and $p$ is the number of predictors excluding the intercept. Adjusted R-squared accounts for the number of predictors in the model and provides a more adjusted measure of the model's explanatory power, especially useful when comparing models with different numbers of predictors.
+
+
+
+
+
 
      
 
@@ -669,41 +718,6 @@ n the boxplot.default function in R, the calculation of the hinges (which corres
 The boxplot.stats function calculates the hinges based on the quartiles of the data. The quartiles are typically calculated using a method that is similar to the Type 7 quantile algorithm in R, which is a part of the quantile function. This method involves interpolating between data points to compute quartiles, which is a common approach in statistical analysis.
 
 
-
-
-
-## Linear Mixed-Effect Models (LMM) R-squared Measures
-
-Linear Mixed-Effects Model (LMM) is suitable for datasets where the first level corresponds to an independent (or fixed-effect) variable and the second level to some grouping/clustering factor (such as subjects with repeated measurements). 
-
-For normal/gaussian error distributions, the model is specified as follows:
-
-$$ y_{ij} = b_0 + \sum_{h=1}^{p} b_h x_{hij} + a_i + \epsilon_{ij} $$
-
-where:
-- $y_{ij}$ is the $j$th observation of the $i$th individual.
-- $b_0$ is the intercept (or grand mean).
-- $b_h$ is the fixed effect coefficient for the $h$th predictor.
-- $x_{hij}$ is the $j$th value for the $i$th individual for the $h$th predictor.
-- $a_i$ is an individual-specific effect, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_a$.
-- $\epsilon_{ij}$ is an observation-specific residual, assumed to be normally distributed in the population with mean 0 and variance $\sigma^2_\epsilon$.
-
-For this model, two types of R-squared can be defined:
-
-**Marginal R-squared or $R^2_{LMM(m)}$**:
-
-$$ R^2_{LMM(m)} = \frac{\sigma^2_f}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
-
-This represents the proportion of the total variance explained by the fixed effects.
-
-**Conditional R-squared or $R^2_{LMM(c)}$**:
-
-$$ R^2_{LMM(c)} = \frac{\sigma^2_f + \sigma^2_a}{\sigma^2_f + \sigma^2_a + \sigma^2_\epsilon} $$
-
-This represents the proportion of variance explained by both fixed and random effects.
-
-Where:
-- $\sigma^2_f$ is the variance explained by fixed effects, calculated as $\text{var} \left( \sum_{h} b_h x_{hij} \right)$.
 
 
 
