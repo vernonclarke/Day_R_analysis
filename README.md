@@ -98,7 +98,7 @@ WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab 
 	axis(2)
 }
 	    
-# if random effects model is singular
+# is random effects model is singular?
 isSingular.fun <- function(formula, data){
 	mod <- suppressMessages(lmer(formula=formula, data=data))
 	isSingular(mod)
