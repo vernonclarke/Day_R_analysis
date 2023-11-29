@@ -566,11 +566,6 @@ if (plotsave) {
 }
 ```	
 
-
-
-
-
-
 ## Functions
 
 ### WBplot
@@ -591,23 +586,14 @@ Any outliers are removed and the default setting for calculating the quartiles i
 In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
 
 - Type 1: Inverse of empirical distribution function.
-
 - Type 2: Similar to type 1 but with averaging at discontinuities.
-
 - Type 3: SAS definition: nearest even order statistic.
-
 - Type 4: Linear interpolation of the empirical cdf.
-
 - Type 5: Piecewise linear function where the knots are the values of order statistics.
-
 - Type 6: Linear interpolation of the expectations based on the order statistics (default).
-
 - Type 7: Linear interpolation of the modes based on the order statistics.
-
 - Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
-
 - Type 9: Linear interpolation of the approximate medians for order statistics.   
-
 
 **Nb** The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
 
@@ -616,7 +602,6 @@ John Tukey's 'hinges' which are used in his five-number summary and for drawing 
 How Tukey's hinges are usually computed:
 
 - The lower hinge is the median of the lower half of the data set (not including the overall median if the number of data points is odd).
-
 - The upper hinge is the median of the upper half of the data set (again not including the overall median if the number of data points is odd).
 
 This method is somewhat akin to R's 'Type 1' method for calculating quantiles, also known as the "inverted empirical distribution function." 
@@ -628,11 +613,8 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 ### Summary
 
 - **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
-
 - **The function `WBplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
-
 - **The default in `WBplot` is type = 6 which should produce similar results to `GraphPad Prism`**
-
 - **For results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
 
 ### Random Mixed Effects Model
