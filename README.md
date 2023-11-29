@@ -8,7 +8,7 @@ Recreates graphical outputs and statistical analyses in the manuscript
 
 - [Functions](#functions)
   - [WBplot](#wbplot)
-  - [R2calc](#r2calculator)
+  - [R2calc](#r2calc)
  
 ## Initial Set Up
 
