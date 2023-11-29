@@ -600,7 +600,7 @@ How Tukey's hinges are usually computed:
 - The lower hinge is the median of the lower half of the data set (not including the overall median if the number of data points is odd).
 - The upper hinge is the median of the upper half of the data set (again not including the overall median if the number of data points is odd).
 
-This method is somewhat akin to R's 'Type 1' method for calculating quantiles, also known as the "inverted empirical distribution function." 
+This method is somewhat akin to R's 'Type 1' method for calculating quantiles, also known as the 'inverted empirical distribution function'. 
 
 The `quantile` function in R with the option `type=1` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original 'hinge' method. 
 
