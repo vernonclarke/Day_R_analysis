@@ -50,7 +50,7 @@ load_required_packages(required.packages)
     
 2. **Set Initial Settings**
 
-  Set the working directory:
+   Set the working directory:
 
 ```R
 mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
@@ -500,7 +500,7 @@ fun.plot2(data12, data13)
 
 5. **Save all the figures in the same directory as the raw data**
 
-  Saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
+   Saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
 
 ```R
 plotsave <- TRUE
