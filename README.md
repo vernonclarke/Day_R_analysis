@@ -434,7 +434,21 @@ wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
 wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
 
 ```
+```R
+# simple eg to illustrate why p values in Fig3F are identical:
 
+test1 <- data11
+# Set a seed for reproducibility
+set.seed(42) 
+
+# Replace y with normally distributed numbers
+test1$y <- rnorm(nrow(test1))
+
+# Add 10 if x = 1, and 20 if x = 2
+test1$y <- test1$y + ifelse(test1$x == 1, 10, ifelse(test1$x == 2, 20, 0))
+
+wilcox.f(data=test1,group1=1, group2=2, paired=FALSE)
+```
  
 ```R
 # Fig4EF 
@@ -452,6 +466,19 @@ wilcox.f(data=data12,group1=2, group2=3)
 wilcox.f(data=data13,group1=2, group2=3)
 ```
 
+```R
+# simple eg to illustrate why p values in Fig4EF are identical:
+
+test2 <- data12
+# Replace y with numbers generated from a normal distribution
+set.seed(42) # for reproducibility
+test2$y <- rnorm(nrow(test2))
+
+# Add 10, 20, or 30 to y based on the value of x
+test2$y <- test2$y + ifelse(test2$x == 1, 10, ifelse(test2$x == 2, 20, 30))
+
+wilcox.f(data=test2,group1=2, group2=3)
+```
 ```R	
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
