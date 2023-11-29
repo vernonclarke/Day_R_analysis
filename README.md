@@ -711,7 +711,7 @@ Adjusted R-squared accounts for the number of predictors in the model and provid
 
 [Bates D, Maechler M, Bolker B, Walker S (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.](https://doi.org/10.18637/jss.v067.i01)
 
-[Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination $R^2$ and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
+[Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination Rsqr and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
 
 [R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.](https://www.R-project.org/)
 
