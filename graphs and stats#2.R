@@ -694,3 +694,212 @@ if (plotsave) {
 	dev.off()
 }
 
+
+
+# 
+methods("r.squaredGLMM")
+# [1] r.squaredGLMM.cplm*     r.squaredGLMM.glmmadmb* r.squaredGLMM.glmmML*   r.squaredGLMM.glmmTMB*  r.squaredGLMM.lm*      
+# [6] r.squaredGLMM.lme*      r.squaredGLMM.merMod*  
+# see '?methods' for accessing help and source code
+
+getAnywhere('r.squaredGLMM.lm')
+# A single object matching ‘r.squaredGLMM.lm’ was found
+# It was found in the following places
+#   registered S3 method for r.squaredGLMM from namespace MuMIn
+#   namespace:MuMIn
+# with value
+
+# function (object, null, envir = parent.frame(), ...) 
+# {
+#     fam <- family(object)
+#     ok <- !is.na(coef(object))
+#     fitted <- (model.matrix(object)[, ok, drop = FALSE] %*% coef(object)[ok])[, 
+#         1L]
+#     delayedAssign("fixefnull", coef(if (missing(null) || !is.object(null)) 
+#         .nullFitRE(object, envir)
+#     else null))
+#     varFE <- var(fitted)
+#     familyName <- fam$family
+#     if (substr(familyName, 1L, 17L) == "Negative Binomial") 
+#         familyName <- "nbinom2"
+#     switch(familyName, gaussian = r2glmm(fam, varFE, 0, varResid = sigma2(object)^2), 
+#         binomial = , quasibinomial = {
+#             r2glmm(fam, varFE, 0, pmean = fam$linkinv(unname(fixefnull)), 
+#                 n = .binomial.sample.size(object))
+#         }, Gamma = {
+#             nu <- sigma2(object)^-2
+#             omega <- 1
+#             r2glmm(fam, varFE, 0, lambda = nu, omega = omega)
+#         }, nbinom2 = {
+#             r2glmm(familyName, varFE, 0, lambda = unname(exp(fixefnull)), 
+#                 omega = sigma2(object), link = fam$link)
+#         }, quasipoisson = , nbinom1 = {
+#             r2glmm(fam, varFE, 0, lambda = unname(exp(fixefnull)), 
+#                 omega = sigma2(object))
+#         }, poisson = {
+#             r2glmm(fam, varFE, 0, lambda = unname(exp(fixefnull)), 
+#                 omega = 1)
+#         }, r2glmm(fam, varFE, 0))
+# } 
+# <bytecode: 0x160772128>
+# <environment: namespace:MuMIn>
+
+r.squaredGLMM(mod)
+
+object=mod
+fam <- family(object)
+ok <- !is.na(coef(object))
+fitted <- (model.matrix(object)[, ok, drop = FALSE] %*% coef(object)[ok])[, 1L]
+delayedAssign("fixefnull", coef(if (missing(null) || !is.object(null)).nullFitRE(object, envir) else null))
+varFE <- var(fitted)
+familyName <- fam$family
+
+MuMIn:::r2glmm(fam, varFE, 0, varResid = MuMIn:::sigma2(object)^2)
+#            R2m       R2c
+# [1,] 0.8553001 0.8553001
+
+
+summary(lm(y ~ x))
+
+# Call:
+# lm(formula = y ~ x)
+# 
+# Residuals:
+#    Min     1Q Median     3Q    Max 
+#  -2.27  -1.74  -0.27   1.29   5.20 
+# 
+# Coefficients:
+#             Estimate Std. Error t value Pr(>|t|)    
+# (Intercept) 42.10000    3.58113   11.76 3.33e-11 ***
+# x            0.70600    0.05928   11.91 2.57e-11 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Residual standard error: 2.096 on 23 degrees of freedom
+# Multiple R-squared:  0.8605,	Adjusted R-squared:  0.8544 
+# F-statistic: 141.9 on 1 and 23 DF,  p-value: 2.566e-11
+
+
+1 - sum(summary(lm(y ~ x))$residuals^2) / sum((y - mean(y))^2)
+
+sqrt(sum(summary(lm(y ~ x))$residuals^2) / (length(y)-2))
+
+MuMIn:::sigma2(object)
+
+
+# Fit the linear model
+model <- lm(y ~ x)
+
+# Get the coefficients (beta_0 and beta_1)
+beta_0 <- coef(model)[1]
+beta_1 <- coef(model)[2]
+
+# Calculate predicted values
+predicted_y <- beta_0 + beta_1 * x
+
+# Calculate residuals manually
+residuals_manual <- y - predicted_y
+
+
+fitted
+
+predicted_y
+
+
+varFE = var(fitted)
+
+
+
+varResid = MuMIn:::sigma2(object)^2
+
+
+varFE/(varFE+23*varResid/24)
+
+1 - sum(summary(lm(y ~ x))$residuals^2) / sum((y - mean(y))^2)
+
+
+
+getAnywhere('r.squaredGLMM.merMod')
+
+fam <- family(object)
+    fe <- MuMIn:::.numfixef(object)
+    ok <- !is.na(fe)
+    fitted <- (model.matrix(object)[, ok, drop = FALSE] %*% fe[ok])[, 
+        1L]
+    varFE <- var(fitted)
+    mmRE <- MuMIn:::.remodmat(object)
+    vc <- MuMIn:::.varcorr(object)
+
+    if (!is.null(vc)) {
+        for (i in seq.int(length(vc))) {
+            a <- MuMIn:::fixCoefNames(rownames(vc[[i]]))
+            dimnames(vc[[i]]) <- list(a, a)
+        }
+        colnames(mmRE) <- MuMIn:::fixCoefNames(colnames(mmRE))
+        if (!all(unlist(sapply(vc, rownames), use.names = FALSE) %in% 
+            colnames(mmRE))) 
+            stop("RE term names do not match those in model matrix. \n", 
+                "Have 'options(contrasts)' changed since the model was fitted?")
+        varRE <- MuMIn:::.varRESum(vc, mmRE)
+    }else {
+        varRE <- 0
+    }
+
+MuMIn:::r2glmm(fam, varFE, varRE, varResid = MuMIn:::sigma2(object)^2)
+
+
+mod <- y ~ x + (1 | s)
+
+# returns R2 for linear and mixed effects models
+
+R2.calculator <- function(formula, data) {
+	
+		# Convert the model formula to a string
+		formula_str <- deparse(formula)
+		
+		# Fit the model
+		if (grepl("\\|", formula_str)) {
+			# Model has random effects (intercepts or slopes)
+			model <- lmer(formula, data = data)
+			includeRandomEffect <- TRUE
+		} else {
+			# Model is a simple linear model
+			model <- lm(formula, data = data)
+			includeRandomEffect <- FALSE
+		}
+		
+		# Variance explained by fixed effects (sigma^2_f)
+		y_pred_fixed <- predict(model, re.form = NA)
+		varFixed <- var(y_pred_fixed)
+		
+		if (includeRandomEffect) {
+			# Variance for random effect (sigma^2_a)
+			varRandom <- sum(sapply(VarCorr(model), function(v) v[1]))
+			
+			# Residual variance (sigma^2_epsilon)
+			varResid <- sigma(model)^2
+			
+			# Calculate R-squared
+			R2_marginal <- varFixed / (varFixed + varRandom + varResid)
+			R2_conditional <- (varFixed + varRandom) / (varFixed + varRandom + varResid)
+			
+			return(list(marginal = R2_marginal, conditional = R2_conditional))
+
+		} else {
+			# For lm model, R-squared is simply the variance of the predicted values 
+			# over the total variance
+			totalVar <- var(data$y)
+			R2 <- varFixed / totalVar
+		
+			# Calculate adjusted R-squared manually
+    			n <- nrow(data)
+    			p <- length(coef(model)) - 1  # number of predictors, excluding intercept
+			adjR2 <- 1 - (1 - R2) * (n - 1) / (n - p - 1)
+
+    			return(list(R2 = R2, adjustedR2 = adjR2))
+		}
+	}
+	
+
+
+R2.calculator(mod, data4)

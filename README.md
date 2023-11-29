@@ -47,7 +47,7 @@ The analyses were conducted in the R graphical user interface (GUI):
      wd <- paste0(getwd(), mypath)
      setwd(wd)
 
-     plotsave = TRUE  
+     plotsave <- TRUE  
      ``` 
 3. **Required Custom Functions**
 
