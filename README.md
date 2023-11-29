@@ -16,11 +16,11 @@ State-dependent GABAergic regulation of striatal spiny projection neuron excitab
  
 ## Initial Set Up
 
-The analyses were conducted in the R graphical user interface (GUI): R version 4.3.1 – 'Beagle Scouts'. 
+  The analyses were conducted in the R graphical user interface (GUI): R version 4.3.1 – 'Beagle Scouts'. 
 
-R can be downloaded [here](https://www.R-project.org/). If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
+  R can be downloaded [here](https://www.R-project.org/). If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
 
-Only the R console was used for analysis. This code should work in `RStudio` although this has not been explicitly tested.  
+  Only the R console was used for analysis. This code should work in `RStudio` although this has not been explicitly tested.  
   
 ## Performing Analysis
 
@@ -50,7 +50,7 @@ load_required_packages(required.packages)
     
 2. **Set Initial Settings**
 
- Set the working directory:
+  Set the working directory:
 
 ```R
 mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
@@ -500,7 +500,7 @@ fun.plot2(data12, data13)
 
 5. **Save all the figures in the same directory as the raw data**
 
-Saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
+  Saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
 
 ```R
 plotsave <- TRUE
