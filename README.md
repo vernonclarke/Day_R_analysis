@@ -53,7 +53,6 @@ load_required_packages(required.packages)
 mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
 wd <- paste0(getwd(), mypath)
 setwd(wd)
-plotsave <- TRUE  
 ``` 
 3. **Required Custom Functions**
    
@@ -476,6 +475,7 @@ fun.plot2(data12, data13)
 5. **Save all the figures in the same directory as the raw data**
 
 ```R
+plotsave <- TRUE
 if (plotsave) {	
 	svglite(paste0('Fig2F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
 	fun.plot(data1, silent=TRUE)
