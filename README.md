@@ -5,10 +5,10 @@ Recreates graphical outputs and statistical analyses in the manuscript
 ## Table of Contents
 - [Initial Set Up](#initial-set-up)
 - [Performing Analysis](#performing-analysis)
-
 - [Functions](#functions)
   - [WBplot](#wbplot)
   - [R2calc](#r2calc)
+- [References](references)
  
 ## Initial Set Up
 
@@ -703,33 +703,23 @@ where $R^2_{LM}$ is the $R^2$ for the linear model, $n$ is the number of observa
 Adjusted R-squared accounts for the number of predictors in the model and provides a more adjusted measure of the model's explanatory power, especially useful when comparing models with different numbers of predictors.
 
 
+## References
+
+[Bates D, Maechler M, Bolker B, Walker S (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.](doi:10.18637/jss.v067.i01)
+
+[Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination $R^2$ and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
+
+[R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.](https://www.R-project.org/)
+
+[Wickham H, Henry L, Pedersen T, Luciani T, Decorde M, Lise V (2023). _svglite: An 'SVG' Graphics Device_. R package version 2.1.2.](https://CRAN.R-project.org/package=svglite)
 
 
 
+This code was written by Vernon Clarke.
 
+The provided code was executed on a `MacBook M2 pro 32GB`. 
 
-
-
-     
-
-
-
-
-
-
- 
-Note: the use of X11 (including tcltk) requires XQuartz (version 2.8.5 or later). 
-
-always re-install XQuartz when upgrading your macOS to a new major version. 
-
-
-
-
-n the boxplot.default function in R, the calculation of the hinges (which correspond to the first and third quartiles of the data) is not done directly within this function. Instead, the boxplot.default function calls another function, boxplot.stats, for each group of data it is plotting. This boxplot.stats function is where the actual computation of the hinges and other statistics necessary for the boxplot takes place.
-
-The boxplot.stats function calculates the hinges based on the quartiles of the data. The quartiles are typically calculated using a method that is similar to the Type 7 quantile algorithm in R, which is a part of the quantile function. This method involves interpolating between data points to compute quartiles, which is a common approach in statistical analysis.
-
-
+For queries related to this repository, please open an [issue]() or [email](WOPR2@proton.me) directly
 
 
 
