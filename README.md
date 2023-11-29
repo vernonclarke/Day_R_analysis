@@ -12,9 +12,9 @@ Recreates graphical outputs and statistical analyses in the manuscript
  
 ## Initial Set Up
 
-The analyses were conducted in the R graphical user interface (GUI):
-  - R version 4.3.1 – 'Beagle Scouts'
-  - [R Statistical Software](https://www.R-project.org/)
+The analyses were conducted in the R graphical user interface (GUI): R version 4.3.1 – 'Beagle Scouts'. 
+
+R can be downloaded [here](https://www.R-project.org/)
 
 If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
 
