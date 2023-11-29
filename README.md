@@ -719,7 +719,7 @@ This code was written by Vernon Clarke.
 
 The provided code was executed on a `MacBook M2 pro 32GB`. 
 
-For queries related to this repository, please open an [issue]() or [email](WOPR2@proton.me) directly
+For queries related to this repository, please open an [issue](https://github.com/vernonclarke/Day_R_analysis/issues) or [email](WOPR2@proton.me) me directly
 
 
 
