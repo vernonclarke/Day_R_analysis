@@ -615,9 +615,9 @@ John Tukey's 'hinges' which are used in his five-number summary and for drawing 
 
 How Tukey's hinges are usually computed:
 
-1. The lower hinge is the median of the lower half of the data set (not including the overall median if the number of data points is odd).
+- The lower hinge is the median of the lower half of the data set (not including the overall median if the number of data points is odd).
 
-2. The upper hinge is the median of the upper half of the data set (again not including the overall median if the number of data points is odd).
+- The upper hinge is the median of the upper half of the data set (again not including the overall median if the number of data points is odd).
 
 This method is somewhat akin to R's 'Type 1' method for calculating quantiles, also known as the "inverted empirical distribution function." 
 
@@ -641,20 +641,20 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 
 **y ~ x + (1|s)**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s. 
 
-1. y: This is the dependent variable you are trying to model or predict.
-2. ~: The tilde separates the dependent variable from the independent variables and random effects.
-3. x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
-4. +: The plus sign indicates that you are including more terms in the model.
-5. (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
+- y: This is the dependent variable you are trying to model or predict.
+-  ~: The tilde separates the dependent variable from the independent variables and random effects.
+- x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
+- +: The plus sign indicates that you are including more terms in the model.
+- (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
 
 ### Linear Model
 **y ~ x**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x. 
 
 Fits to the random mixed effects model may be singular if:
 
-1. There is some redundancy in random effects: the model is too complex for the data with random effects that do not contribute much variance. For example, the random intercepts for each level of subject, s may not vary enough from each other. This can happen if there are too few levels in s or if the data within each level of s does not vary much.
+- There is some redundancy in random effects: the model is too complex for the data with random effects that do not contribute much variance. For example, the random intercepts for each level of subject, s may not vary enough from each other. This can happen if there are too few levels in s or if the data within each level of s does not vary much.
 
-2. The variance of the random effects or the residual variance is estimated to be near zero. This suggests that the random effect might not be necessary, as it doesn't explain a significant amount of variability in the data.
+- The variance of the random effects or the residual variance is estimated to be near zero. This suggests that the random effect might not be necessary, as it doesn't explain a significant amount of variability in the data.
 
 If fits of **y ~ x + (1|s)** are singular, the function simplifies the model to linear regression **y ~ x**.
 
@@ -666,8 +666,8 @@ In the context of linear mixed-effect models, $R^2$ can be a bit more complex to
 
 There are actually two commonly reported $R^2$ values for linear mixed models:
 	
-1. Marginal $R^2$: Represents the variance explained by the fixed effects alone.
-2. Conditional $R^2$: Represents the variance explained by both the fixed and random effects.
+- **Marginal $R^2$**: Represents the variance explained by the fixed effects alone.
+- **Conditional $R^2$**: Represents the variance explained by both the fixed and random effects.
 
 The conditional $R^2$ is always equal to or larger than the marginal $R^2$ since it also includes the variance explained by the random effects.
 
