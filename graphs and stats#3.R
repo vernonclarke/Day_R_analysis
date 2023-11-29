@@ -19,9 +19,6 @@ load_required_packages(required.packages)
 mypath <- '/documents/Repositories/Day_R_analysis/figs and csv files' 
 wd <- paste0(getwd(), mypath)
 setwd(wd)
-
-# saving graphs: if plotsave <- TRUE then any generated graphs are saved as svgs into working folder
-plotsave <- TRUE  
 ##############################################################################################################
 # Custom functions
 custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
@@ -610,6 +607,9 @@ dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
 fun.plot2(data12, data13)
 ##############################################################################################################
+# saving graphs: if plotsave <- TRUE then any generated graphs are saved as svgs into working folder.
+# The final graphs were created from these svg files using Adobe Illustrator.
+plotsave <- TRUE  
 if (plotsave) {	
 	svglite(paste0('Fig2F1 ', gsub(':', '-', Sys.time()), '.svg'), width=2,height=3.75, pointsize=10)
 	fun.plot(data1, silent=TRUE)
