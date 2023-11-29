@@ -59,7 +59,7 @@ lwd=0.8, type=6) {
 	axis(2)
 }
 	    
-# if random effects model is singular
+# is random effects model is singular?
 isSingular.fun <- function(formula, data){
 	mod <- suppressMessages(lmer(formula=formula, data=data))
 	isSingular(mod)
