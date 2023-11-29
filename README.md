@@ -1,6 +1,10 @@
-### R analysis for Day et al., 2023
+## R analysis for Day et al., 2023
 
-Recreates graphical outputs and statistical analyses in the manuscript 
+Recreates graphical outputs and statistical analyses in the manuscript:
+
+Day M., Belal M., Surmeier W. C., Melendez A., Wokosin, D., Tkatch T., Clarke V. R. J. and Surmeier D. J.
+
+State-dependent GABAergic regulation of striatal spiny projection neuron excitability (2023)
 
 ## Table of Contents
 - [Initial Set Up](#initial-set-up)
@@ -8,15 +12,15 @@ Recreates graphical outputs and statistical analyses in the manuscript
 - [Functions](#functions)
   - [WBplot](#wbplot)
   - [R2calc](#r2calc)
-- [References](references)
+- [References](#references)
  
 ## Initial Set Up
 
-The analyses were conducted in the R graphical user interface (GUI): R version 4.3.1 – 'Beagle Scouts'. 
+  The analyses were conducted in the R graphical user interface (GUI): R version 4.3.1 – 'Beagle Scouts'. 
 
-R can be downloaded [here](https://www.R-project.org/). If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
+  R can be downloaded [here](https://www.R-project.org/). If you prefer to work with `RStudio`, it can be downloaded [here](https://posit.co/products/open-source/rstudio/). 
 
-Only the R console was used for analysis. This code should work in `RStudio` although this has not been explicitly tested.  
+  Only the R console was used for analysis. This code should work in `RStudio` although this has not been explicitly tested.  
   
 ## Performing Analysis
 
@@ -46,8 +50,7 @@ load_required_packages(required.packages)
     
 2. **Set Initial Settings**
 
- - set the working directory
- - saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
+   Set the working directory:
 
 ```R
 mypath <- '/yourpath/Day_R_analysis/figs and csv files' 
@@ -497,6 +500,8 @@ fun.plot2(data12, data13)
 
 5. **Save all the figures in the same directory as the raw data**
 
+   Saving graphs: if `plotsave <- TRUE` then any generated graphs are saved as svgs into working folder 
+
 ```R
 plotsave <- TRUE
 if (plotsave) {	
@@ -705,9 +710,9 @@ Adjusted R-squared accounts for the number of predictors in the model and provid
 
 ## References
 
-[Bates D, Maechler M, Bolker B, Walker S (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.](doi:10.18637/jss.v067.i01)
+[Bates D, Maechler M, Bolker B, Walker S (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.](https://doi.org/10.18637/jss.v067.i01)
 
-[Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination $R^2$ and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
+[Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination Rsqr and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
 
 [R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.](https://www.R-project.org/)
 
