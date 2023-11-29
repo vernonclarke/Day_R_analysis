@@ -7,8 +7,8 @@ Recreates graphical outputs and statistical analyses in the manuscript
 - [Performing Analysis](#performing-analysis)
 
 - [Functions](#functions)
-  - [custom_boxplot](#custom_boxplot)
-  - [R2.calculator](#r2calculator)
+  - [WBplot](#wbplot)
+  - [R2calc](#r2calculator)
  
 ## Initial Set Up
 
@@ -30,7 +30,7 @@ Only the R console was used for analysis. This code should work in `RStudio` alt
 
      The required packages are [`svglite`](https://cran.r-project.org/web/packages/svglite/index.html) and [`lme4`](https://www.rdocumentation.org/packages/nlme/versions/3.1-163/topics/lme) .
 
-     Nb. as the function `load_required_packages` checks if the packages are installed, installs them if they are not AND subsequently loads them into the current R environment, it must be run everytime analysis is performed.
+     **Nb** as the function `load_required_packages` checks if the packages are in the library, installs them if they are not AND subsequently loads them into the current R environment, it must be run everytime analysis is performed.
 
 
 ```R
@@ -59,7 +59,7 @@ setwd(wd)
    These custom-written functions are required to make the graphs etc.
 
 ```R
-custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
+WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
 ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
 lwd=0.8, type=6) {
 	x <- data$x
@@ -123,7 +123,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 		m <- coeffs[[2]]
 		c <- coeffs[[1]]
 	}
-	r2_values <- R2.calculator(formula, data)
+	r2_values <- R2calc(formula, data)
 	
 	if (!silent){
 		cat("model is ", format(formula), "\n")
@@ -144,7 +144,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 	data$x_jitter <- jitter(data$x, amount=amount)
 	
 	# Boxplot
-	custom_boxplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
+	WBplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
 	# Plot individual data points with reduced jitter, reduced size, and unfilled circles without x and y axes
 	points(data$x_jitter, data$y, pch=19, bg="transparent", col="darkgray", lwd=lwd/2, cex=p.cex)
 	# Connect data points within subjects with gray dotted lines
@@ -167,7 +167,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 	# list(reversal=-c/m, r2_values =r2_values)	
 }
 
-R2.calculator <- function(formula, data) {
+R2calc <- function(formula, data) {
 
 	# Convert the model formula to a string
 	formula_str <- deparse(formula)
@@ -307,7 +307,7 @@ output.fun <- function(data, type=6, MAD = FALSE){
     return(out)
 }
 
-plot_error_bars <- function(X, Y, color, lwd, xrange, yrange) {
+plot.error.bars <- function(X, Y, color, lwd, xrange, yrange) {
 	x_q1 <- X[1]
 	x_median <- X[2]
 	x_q3 <- X[3]
@@ -342,12 +342,12 @@ fun.plot2 = function(data12, data13){
 	# Box13 Data
 	X <- box13[2:4,2]
 	Y <- box12[2:4,2]
-	plot_error_bars(X, Y, color='indianred', lwd=lwd, xrange=xrange, yrange=yrange)
+	plot.error.bars(X, Y, color='indianred', lwd=lwd, xrange=xrange, yrange=yrange)
 
 	# Box12 Data
 	X <- box13[2:4,3]
 	Y <- box12[2:4,3]
-	plot_error_bars(X, Y, color='black', lwd=lwd, xrange=xrange, yrange=yrange)
+	plot.error.bars(X, Y, color='black', lwd=lwd, xrange=xrange, yrange=yrange)
     
 	points(data13$y[data13$x == 2], data12$y[data12$x == 2],pch=20, col='indianred')
 	points(data13$y[data13$x == 3], data12$y[data12$x == 3], pch=20, col='black')
@@ -573,18 +573,18 @@ if (plotsave) {
 
 ## Functions
 
-### custom_boxplot
+### WBplot
 
-The function, `custom_boxplot` is a customised function to create boxplots. 
+The function, `WBplot` is a customised function to create whisker-and-box plots. 
 
-The boxplot function creates a box-and-whisker plot, which is a standardized way of displaying the distribution of data based on a five-number summary:
+This is a standardized way of displaying the distribution of data based on a five-number summary:
 
-1. Minimum: The smallest data point, excluding any outliers.
-2. First quartile (Q1): The data point below which 25% of the data fall.
-3. Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
-4. Third quartile (Q3): The data point below which 75% of the data fall.
-5. Maximum: The largest data point, excluding any outliers.
-6. Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and Q3 + 1.5 * iqr for upper bound limits.
+- Minimum: The smallest data point, excluding any outliers.
+- First quartile (Q1): The data point below which 25% of the data fall.
+- Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
+- Third quartile (Q3): The data point below which 75% of the data fall.
+- Maximum: The largest data point, excluding any outliers.
+- Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and Q3 + 1.5 * iqr for upper bound limits.
 
 Any outliers are removed and the default setting for calculating the quartiles is type = 6.
 
@@ -609,7 +609,7 @@ In R's `quantile` function, there are 9 types of quantile algorithms, named type
 - Type 9: Linear interpolation of the approximate medians for order statistics.   
 
 
-NOTE The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
+**Nb** The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
 
 John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
@@ -629,9 +629,9 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 
 - **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
 
-- **The function `custom_boxplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
+- **The function `WBplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
 
-- **The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`**
+- **The default in `WBplot` is type = 6 which should produce similar results to `GraphPad Prism`**
 
 - **For results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
 
@@ -658,9 +658,9 @@ Fits to the random mixed effects model may be singular if:
 
 If fits of **y ~ x + (1|s)** are singular, the function simplifies the model to linear regression **y ~ x**.
 
-### R2.calculator
+### R2calc
 
-The function `R2.calculator` calculates the appropriate value of $R^2$.
+The function `R2calc` calculates the appropriate value of $R^2$.
 
 In the context of linear mixed-effect models, $R^2$ can be a bit more complex to define and interpret than in standard linear regression. 
 

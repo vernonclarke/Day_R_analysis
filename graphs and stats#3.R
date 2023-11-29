@@ -21,7 +21,7 @@ wd <- paste0(getwd(), mypath)
 setwd(wd)
 ##############################################################################################################
 # Custom functions
-custom_boxplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
+WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
 ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
 lwd=0.8, type=6) {
 	x <- data$x
@@ -85,7 +85,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 		m <- coeffs[[2]]
 		c <- coeffs[[1]]
 	}
-	r2_values <- R2.calculator(formula, data)
+	r2_values <- R2calc(formula, data)
 	
 	if (!silent){
 		cat('model is ', format(formula), '\n')
@@ -106,7 +106,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 	data$x_jitter <- jitter(data$x, amount=amount)
 	
 	# Boxplot
-	custom_boxplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
+	WBplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
 	# Plot individual data points with reduced jitter, reduced size, and unfilled circles without x and y axes
 	points(data$x_jitter, data$y, pch=19, bg='transparent', col='darkgray', lwd=lwd/2, cex=p.cex)
 	# Connect data points within subjects with gray dotted lines
@@ -129,7 +129,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 	# list(reversal=-c/m, r2_values =r2_values)	
 }
 
-R2.calculator <- function(formula, data) {
+R2calc <- function(formula, data) {
 
 	# Convert the model formula to a string
 	formula_str <- deparse(formula)
@@ -269,7 +269,7 @@ output.fun <- function(data, type=6, MAD = FALSE){
     return(out)
 }
 
-plot_error_bars <- function(X, Y, color, lwd, xrange, yrange) {
+plot.error.bars <- function(X, Y, color, lwd, xrange, yrange) {
 	x_q1 <- X[1]
 	x_median <- X[2]
 	x_q3 <- X[3]
@@ -304,12 +304,12 @@ fun.plot2 = function(data12, data13){
 	# Box13 Data
 	X <- box13[2:4,2]
 	Y <- box12[2:4,2]
-	plot_error_bars(X, Y, color='indianred', lwd=lwd, xrange=xrange, yrange=yrange)
+	plot.error.bars(X, Y, color='indianred', lwd=lwd, xrange=xrange, yrange=yrange)
 
 	# Box12 Data
 	X <- box13[2:4,3]
 	Y <- box12[2:4,3]
-	plot_error_bars(X, Y, color='black', lwd=lwd, xrange=xrange, yrange=yrange)
+	plot.error.bars(X, Y, color='black', lwd=lwd, xrange=xrange, yrange=yrange)
     
 	points(data13$y[data13$x == 2], data12$y[data12$x == 2],pch=20, col='indianred')
 	points(data13$y[data13$x == 3], data12$y[data12$x == 3], pch=20, col='black')
