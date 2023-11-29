@@ -603,11 +603,13 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 
 ### Summary
 
-**The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
+- **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**
 
-**The function `custom_boxplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
+- **The function `custom_boxplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**
 
-**The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`; for results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
+- **The default in `custom_boxplot` is type = 6 which should produce similar results to `GraphPad Prism`**
+
+- **For results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**
 
 ### Random Mixed Effects Model
 
