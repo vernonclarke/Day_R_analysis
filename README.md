@@ -622,7 +622,7 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 
 **Linear Regression** is performed using the package `lmer`. The function determines whether the fit of the model is singular. If not then it fits by random mixed effects model. In `lmer` terminology, the formula for this is **y ~ x + (1|s)**. This formula specifies how the dependent variable 'y' is modeled in relation to the independent (or fixed-effect) predictor variable 'x' and the random effect of the subject 's'. 
 
-**y ~ x + (1|s)**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of the subject s. 
+**y ~ x + (1|s)**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of subject s. 
 
 - y: This is the dependent variable you are trying to model or predict.
 -  ~: The tilde separates the dependent variable from the independent variables and random effects.
