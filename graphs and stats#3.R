@@ -548,8 +548,6 @@ wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
 # W = 16, p-value = 0.02857
 # alternative hypothesis: true location shift is not equal to 0
 
-
-# nb result IS, in fact, identical to the previous one (simply because pairs in data10 and data11 go in identical directions)
 wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
 
 # 	Wilcoxon rank sum exact test
@@ -557,6 +555,8 @@ wilcox.f(data=data11,group1=1, group2=2, paired=FALSE)
 # data:  x and y
 # W = 16, p-value = 0.02857
 # alternative hypothesis: true location shift is not equal to 0
+
+# nb result IS, in fact, identical to the previous one (simply because pairs in data10 and data11 go in identical directions with no ties)
 ##############################################################################################################
 # Fig4EF 
 data4E <- import.fun('data12')
@@ -584,6 +584,8 @@ wilcox.f(data=data13,group1=2, group2=3)
 # data:  x and y
 # V = 0, p-value = 0.0009766
 # alternative hypothesis: true location shift is not equal to 0
+
+# nb result IS, in fact, identical to the previous one (simply because pairs in data12 and data13 go in identical directions with no ties)
 ##############################################################################################################
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
