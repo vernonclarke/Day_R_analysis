@@ -579,15 +579,11 @@ wilcox.f(data=data12,group1=2, group2=3)
 
 wilcox.f(data=data13,group1=2, group2=3)
 
-# 	Wilcoxon signed rank test with continuity correction
+# 	Wilcoxon signed rank exact test
 
 # data:  x and y
-# V = 0, p-value = 0.003822
+# V = 0, p-value = 0.0009766
 # alternative hypothesis: true location shift is not equal to 0
-
-# Warning message:
-# In wilcox.test.default(x, y, paired = paired, alternative = alternative,  :
-#   cannot compute exact p-value with ties
 ##############################################################################################################
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
