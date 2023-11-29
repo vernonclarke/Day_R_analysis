@@ -99,7 +99,7 @@ WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab 
 isSingular.fun <- function(formula, data){
 	mod <- suppressMessages(lmer(formula=formula, data=data))
 	isSingular(mod)
-	} 
+} 
 	
 fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){
 	
