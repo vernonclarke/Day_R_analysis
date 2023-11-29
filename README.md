@@ -662,7 +662,7 @@ It is suitable for datasets where the first level corresponds to an independent 
 
 The following is adapted from [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213):
 
-For normal/gaussian error distributions, the model is specified as follows:
+For Normal/Gaussian error distributions, the model is specified as follows:
 
 $$ y_{ij} = b_0 + \sum_{h=1}^{p} b_h x_{hij} + a_i + \epsilon_{ij} $$
 
