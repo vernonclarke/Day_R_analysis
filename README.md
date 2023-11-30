@@ -429,7 +429,6 @@ par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.
 fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
-
 # Fig3F: statistcal tests; performing Mann U as not enough values for paired (n = 5 pairs is required)
 wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
 
@@ -584,9 +583,9 @@ This is a standardized way of displaying the distribution of data based on a fiv
 - Maximum: The largest data point, excluding any outliers.
 - Outliers are defined as values more extreme than q1 - 1.5 * iqr  for lower and q3 + 1.5 * iqr for upper bound limits where the inter-quartile range is defined as iqr = q3 - q1.
 
-Any outliers are removed and the default setting for calculating the quartiles is type = 6.
+Any outliers are removed and the default setting for calculating the quartiles is `type = 6`.
 
-In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These algorithms use different methods to calculate specified quantiles. This function is used to calculate the  
+In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These algorithms use different methods to calculate specified quantiles (for more information [see](https://doi.org/10.2307/2684934). 
 
 - Type 1: Inverse of the empirical distribution function.
 - Type 2: Similar to type 1 but with averaging at discontinuities.
@@ -609,9 +608,32 @@ How Tukey's hinges are usually computed:
 
 This method is somewhat akin to R's 'Type 1' method for calculating quantiles, also known as the 'inverted empirical distribution function'. 
 
-The `quantile` function in R with the option `type=1` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original 'hinge' method. 
+The `quantile` function in R with the option `type=7` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original 'hinge' method. 
 
-`GraphPad Prism` default seems to calculate quartiles using the method that is commonly taught, which corresponds to 'Type 7' in R's `quantile` function
+`GraphPad Prism` default seems to calculate quartiles using the method which corresponds to 'Type 6' in R's `quantile` function. For further information [see](https://www.graphpad.com/support/faq/how-prism-computes-percentiles/).
+
+
+
+A comparison of WBplot with 'Type 6' , 'Type 7' and R's native `boxplot` function is illustrated by running the following code:
+
+```R
+data4E <- import.fun('data12')
+data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
+
+dev.new(width=9 ,height=4, noRStudioGD=TRUE)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+
+WBplot(data=data12, wid=0.2, cap=0.1, xlab = '', ylab = '', xrange=c(0.5,3.5), yrange=c(0,35), lwd=0.8)
+# Add text to the plot
+text(x = 2.5, y = 0, labels = 'WBplot; type=6')
+
+WBplot(data=data12, wid=0.2, cap=0.1, xlab = '', ylab = '', xrange=c(0.5,3.5), yrange=c(0,35), lwd=0.8, type=7)
+text(x = 2.5, y = 0, labels = 'WBplot; type=7')
+
+boxplot(y ~ x, data = data12, main = '', xlab = '', ylab = '', ylim=c(0,35), xlim=c(0.5,3.5), boxwex=0.35, lwd=0.8, col='white', border='black', frame=FALSE)
+text(x = 2.5, y = 0, labels = 'boxplot')
+```
+
 
 ### Summary
 
@@ -709,6 +731,8 @@ Adjusted R-squared accounts for the number of predictors in the model and is esp
 ## References
 
 [Bates D, Maechler M, Bolker B, Walker S (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.](https://doi.org/10.18637/jss.v067.i01)
+
+[Hyndman R. J. and Fan Y (1996), Sample Quantiles in Statistical Packages. The American Statistician, Vol. 50(4), pp. 361-365.](https://doi.org/10.2307/2684934)
 
 [Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination Rsqr and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
 
