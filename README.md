@@ -72,29 +72,29 @@ WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab 
 	plot(1, type="n", ylim=yrange, xlim=xrange, xlab=xlab, ylab=ylab, xaxt="n", yaxt="n", bty='n', lwd=lwd)
 	
 	for (i in 1:length(unique_x)) {
-	current_x <- unique_x[i]
-	d <- data$y[data$x == current_x]
-	
-	q1 <- quantile(d, probs=0.25, type=type)
-	q3 <- quantile(d, probs=0.75, type=type)
-	iqr <- q3 - q1  # Calculate IQR
-	
-	lower_bound <- q1 - 1.5 * iqr  # Lower bound for outliers
-	upper_bound <- q3 + 1.5 * iqr  # Upper bound for outliers
-	
-	# Exclude outliers
-	d_filtered <- d[d >= lower_bound & d <= upper_bound]
-	
-	median_val <- median(d_filtered)
-	min_val <- min(d_filtered)
-	max_val <- max(d_filtered)
-	
-	rect(current_x - wid, q1, current_x + wid, q3, col="white", lwd=lwd)
-	segments(current_x, q1, current_x, min_val, lwd=lwd)
-	segments(current_x, q3, current_x, max_val, lwd=lwd)
-	segments(current_x - cap, min_val, current_x + cap, min_val, lwd=lwd)
-	segments(current_x - cap, max_val, current_x + cap, max_val, lwd=lwd)
-	segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col="black", lwd=3*lwd)
+		current_x <- unique_x[i]
+		d <- data$y[data$x == current_x]
+		
+		q1 <- quantile(d, probs=0.25, type=type)
+		q3 <- quantile(d, probs=0.75, type=type)
+		iqr <- q3 - q1  # Calculate IQR
+		
+		lower_bound <- q1 - 1.5 * iqr  # Lower bound for outliers
+		upper_bound <- q3 + 1.5 * iqr  # Upper bound for outliers
+		
+		# Exclude outliers
+		d_filtered <- d[d >= lower_bound & d <= upper_bound]
+		
+		median_val <- median(d_filtered)
+		min_val <- min(d_filtered)
+		max_val <- max(d_filtered)
+		
+		rect(current_x - wid, q1, current_x + wid, q3, col="white", lwd=lwd)
+		segments(current_x, q1, current_x, min_val, lwd=lwd)
+		segments(current_x, q3, current_x, max_val, lwd=lwd)
+		segments(current_x - cap, min_val, current_x + cap, min_val, lwd=lwd)
+		segments(current_x - cap, max_val, current_x + cap, max_val, lwd=lwd)
+		segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col="black", lwd=3*lwd)
 	}
 	axis(1, at=unique_x, labels=unique_x)
 	axis(2)
