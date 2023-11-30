@@ -578,17 +578,17 @@ The function, `WBplot` is a customised function to create whisker-and-box plots.
 This is a standardized way of displaying the distribution of data based on a five-number summary:
 
 - Minimum: The smallest data point, excluding any outliers.
-- First quartile (Q1): The data point below which 25% of the data fall.
-- Median (Q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
-- Third quartile (Q3): The data point below which 75% of the data fall.
+- First quartile (q1): The data point below which 25% of the data fall.
+- Median (q2 or second quartile): The data point that divides the data into two halves. 50% of the data fall below the median, and 50% of the data fall above it.
+- Third quartile (q3): The data point below which 75% of the data fall.
 - Maximum: The largest data point, excluding any outliers.
-- Outliers are defined as values more extreme than Q1 - 1.5 * iqr  for lower and Q3 + 1.5 * iqr for upper bound limits.
+- Outliers are defined as values more extreme than q1 - 1.5 * iqr  for lower and q3 + 1.5 * iqr for upper bound limits where the inter-quartile range is defined as iqr = q3 - q1.
 
 Any outliers are removed and the default setting for calculating the quartiles is type = 6.
 
-In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These methods are defined to give different treatments for the lower and upper tails and whether they should be exclusive or inclusive. 
+In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These algorithms use different methods to calculate specified quantiles. This function is used to calculate the  
 
-- Type 1: Inverse of empirical distribution function.
+- Type 1: Inverse of the empirical distribution function.
 - Type 2: Similar to type 1 but with averaging at discontinuities.
 - Type 3: SAS definition: nearest even order statistic.
 - Type 4: Linear interpolation of the empirical cdf.
@@ -598,7 +598,7 @@ In R's `quantile` function, there are 9 types of quantile algorithms, named type
 - Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
 - Type 9: Linear interpolation of the approximate medians for order statistics.   
 
-**Nb** The R function, `boxplot` is not used to make whisker-and-box plots because this is not the method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
+**Nb** The R function, `boxplot` is not used to make whisker-and-box plots because this is not prefered method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
 
 John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
@@ -620,24 +620,22 @@ The `quantile` function in R with the option `type=1` in R's default `boxplot`, 
 - **The default in `WBplot` is type = 6 which should produce similar results to `GraphPad Prism`**.
 - **For results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 1**.
 
-### Random Mixed Effects Model
+### Random Mixed-Effects Model
 
-**Linear Regression** is performed using the package `lmer`. The function determines whether the fit of the model is singular. If not then it fits by random mixed effects model. In `lmer` terminology, the formula for this is **y ~ x + (1|s)**. This formula specifies how the dependent variable 'y' is modeled in relation to the independent (or fixed-effect) predictor variable 'x' and the random effect of the subject 's'. 
-
-**y ~ x + (1|s)**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x and the random effect of subject s. 
+**Linear Regression** is performed using the package `lmer`. The function determines whether the fit of the model is singular. If not then it fits by random mixed-effects model. In `lmer` terminology, the formula for this is **y ~ x + (1|s)**. This formula specifies how the dependent variable 'y' is modeled in relation to the independent (or fixed-effect) predictor variable 'x' and the random effect of the subject 's'. 
 
 - y: This is the dependent variable you are trying to model or predict.
 -  ~: The tilde separates the dependent variable from the independent variables and random effects.
-- x: This is the independent (or fixed-effect) variable. The model will estimate how y varies with x.
+- x: This is the independent (or fixed-effect) variable. The model will estimate how 'y' varies with 'x'.
 - +: The plus sign indicates that you are including more terms in the model.
-- (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own baseline value of y that is randomly distributed around the overall mean of y.
+- (1|s): This is a random intercept for subject s. In other words, each subject is allowed to have its own intercept value of y that is randomly distributed around the overall mean of y.
 
 ### Linear Model
 **y ~ x**: the formula specifies how the dependent variable y is modeled in relation to the predictor variable x. 
 
-Fits to the random mixed effects model may be singular if:
+Fits to the random mixed-effects models may be singular if:
 
-- There is some redundancy in random effects: the model is too complex for the data with random effects that do not contribute much variance. For example, the random intercepts for each level of subject, s may not vary enough from each other. This can happen if there are too few levels in s or if the data within each level of s does not vary much.
+- There is some redundancy in random effects: the model is too complex for the data with random effects that do not contribute much variance. As an example, the random intercepts for each level of subject, s may be very similar. This can happen if there are too few levels in s or if the data within each level of s does not vary much.
 
 - The variance of the random effects or the residual variance is estimated to be near zero. This suggests that the random effect might not be necessary, as it doesn't explain a significant amount of variability in the data.
 
@@ -656,11 +654,9 @@ There are actually two commonly reported $R^2$ values for linear mixed models:
 
 The conditional $R^2$ is always equal to or larger than the marginal $R^2$ since it also includes the variance explained by the random effects.
 
-The method for calculating $R^2$ in linear mixed-effect models is based on the method of [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213). 
+The method for calculating $R^2$ in linear mixed-effect models is summarised in [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213). 
 
 It is suitable for datasets where the first level corresponds to an independent (or fixed-effect) variable and the second level to some grouping/clustering factor (such as subjects with repeated measurements). 
-
-The following is adapted from [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213):
 
 For Normal/Gaussian error distributions, the model is specified as follows:
 
