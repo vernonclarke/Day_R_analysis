@@ -447,7 +447,7 @@ set.seed(42)
 test1$y <- rnorm(nrow(test1))
 
 # Add 10 if x = 1, and 20 if x = 2
-test1$y <- test1$y + ifelse(test1$x == 1, 10, ifelse(test1$x == 2, 20, 0))
+test1$y <- test1$y + ifelse(test1$x == 1, 10, ifelse(test1$x == 2, 20, 0)) # all values in level 2 are larger than any value in level 1
 
 wilcox.f(data=test1,group1=1, group2=2, paired=FALSE)
 ```
@@ -476,7 +476,7 @@ set.seed(42) # for reproducibility
 test2$y <- rnorm(nrow(test2))
 
 # Add 10, 20, or 30 to y based on the value of x
-test2$y <- test2$y + ifelse(test2$x == 1, 10, ifelse(test2$x == 2, 20, 30))
+test2$y <- test2$y + ifelse(test2$x == 1, 10, ifelse(test2$x == 2, 20, 30)) # direction of change for each pair is the same
 
 wilcox.f(data=test2,group1=2, group2=3)
 ```
