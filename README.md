@@ -61,7 +61,7 @@ setwd(wd)
 ``` 
 3. **Required Custom Functions**
    
-   These custom-written functions are required to make the graphs etc.
+   These custom-written functions are required to make the graphs and perform the statistical analyses.
 
 ```R
 WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, type=6) {
