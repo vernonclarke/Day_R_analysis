@@ -253,7 +253,7 @@ wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided',
 }
 
 # Functions for FigS1	
-fun.plot.S1 = function(){
+fun.plot.S1 <- function(){
 	plot(dataS1$'A+B', dataS1$'C', xlab = 'linear prediction (mV)', ylab = 'actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
 
 	# Define the points for the y=x line
@@ -333,7 +333,7 @@ plot.error.bars <- function(X, Y, color, lwd, xrange, yrange) {
 	segments(x_median - 0.5*wid.x, y_q3, x_median + 0.5*wid.x, y_q3, col=color, lwd=lwd)	  
 }
 
-fun.plot2 = function(data12, data13){
+fun.plot2 <- function(data12, data13){
 	plot(NULL, xlim=xrange, ylim=yrange, xlab='x', ylab='y', type='n', bty='n')
 
 	box12 <- output.fun(data12, MAD=TRUE)
