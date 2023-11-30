@@ -654,9 +654,9 @@ There are actually two commonly reported $R^2$ values for linear mixed models:
 
 The conditional $R^2$ is always equal to or larger than the marginal $R^2$ since it also includes the variance explained by the random effects.
 
-The method for calculating $R^2$ in linear mixed-effect models is summarised in [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213). 
-
 It is suitable for datasets where the first level corresponds to an independent (or fixed-effect) variable and the second level to some grouping/clustering factor (such as subjects with repeated measurements). 
+
+The method for calculating $R^2$ in linear mixed-effect models is nicely summarised in [Nakagawa et al., 2017](http://dx.doi.org/10.1098/rsif.2017.0213) and is reproduced here.
 
 For Normal/Gaussian error distributions, the model is specified as follows:
 
