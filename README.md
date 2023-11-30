@@ -106,7 +106,7 @@ isSingular.fun <- function(formula, data){
 	isSingular(mod)
 } 
 	
-fun.plot=function(data, wid=1, cap=0.5, xlab='membrane potential (mV)', ylab='PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){	
+fun.plot <- function(data, wid=1, cap=0.5, xlab='membrane potential (mV)', ylab='PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){	
 	# Fit the model using lmer
 	# model_lmer <- lmer(y ~ x + (1|s))
 	x <- data$x
@@ -488,7 +488,7 @@ fun.plot.S1()
 
 	
 # Initial settings
-lwd=0.8; xrange=c(0,0.25); yrange=c(0,35)
+lwd <- 0.8; xrange <- c(0,0.25); yrange <- c(0,35)
 
 # FigS1
 dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
