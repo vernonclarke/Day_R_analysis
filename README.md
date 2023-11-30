@@ -202,8 +202,7 @@ R2calc <- function(formula, data) {
 		return(list(marginal = R2_marginal, conditional = R2_conditional))
 
 	} else {
-		# For lm model, R-squared is simply the variance of the predicted values 
-		# over the total variance
+		# For lm model, R-squared is simply the variance of the predicted values over the total variance
 		totalVar <- var(data$y)
 		R2 <- varFixed / totalVar
 	
