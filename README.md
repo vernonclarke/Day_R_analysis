@@ -42,7 +42,7 @@ State-dependent GABAergic regulation of striatal spiny projection neuron excitab
 ```R
 rm( list=ls(all=TRUE ) )
 load_required_packages <- function(packages){
-	new.packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+	new.packages <- packages[!(packages %in% installed.packages()[,'Package'])]
 	if (length(new.packages)) install.packages(new.packages)
 	invisible(lapply(packages, library, character.only=TRUE))
 }	  
@@ -69,7 +69,7 @@ WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab 
 	y <- data$y
 	unique_x <- unique(data$x)
 	xrange <- xrange + c(-wid, wid)
-	plot(1, type="n", ylim=yrange, xlim=xrange, xlab=xlab, ylab=ylab, xaxt="n", yaxt="n", bty='n', lwd=lwd)
+	plot(1, type='n', ylim=yrange, xlim=xrange, xlab=xlab, ylab=ylab, xaxt='n', yaxt='n', bty='n', lwd=lwd)
 	
 	for (i in 1:length(unique_x)) {
 		current_x <- unique_x[i]
@@ -89,12 +89,12 @@ WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab 
 		min_val <- min(d_filtered)
 		max_val <- max(d_filtered)
 		
-		rect(current_x - wid, q1, current_x + wid, q3, col="white", lwd=lwd)
+		rect(current_x - wid, q1, current_x + wid, q3, col='white', lwd=lwd)
 		segments(current_x, q1, current_x, min_val, lwd=lwd)
 		segments(current_x, q3, current_x, max_val, lwd=lwd)
 		segments(current_x - cap, min_val, current_x + cap, min_val, lwd=lwd)
 		segments(current_x - cap, max_val, current_x + cap, max_val, lwd=lwd)
-		segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col="black", lwd=3*lwd)
+		segments(current_x - wid*1.1, median_val, current_x + wid*1.1, median_val, col='black', lwd=3*lwd)
 	}
 	axis(1, at=unique_x, labels=unique_x)
 	axis(2)
@@ -129,17 +129,17 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 	r2_values <- R2calc(formula, data)
 	
 	if (!silent){
-		cat("model is ", format(formula), "\n")
+		cat('model is ', format(formula), '\n')
 
 		print(summary(mod))
 
 		# x intercept
-		cat("x intercept is ", format(-c/m), "mV", "\n")
+		cat('x intercept is ', format(-c/m), 'mV', '\n')
 	    
 		if (mixed){
-			cat("rsqr (marginal) ", format(r2_values[1]), " rsqr (conditional) ", format(r2_values[2]))
+			cat('rsqr (marginal) ', format(r2_values[1]), ' rsqr (conditional) ', format(r2_values[2]))
 		}else{
-			cat("rsqr (multiple) ", format(r2_values[1]), " rsqr (adjusted) ", format(r2_values[2]))
+			cat('rsqr (multiple) ', format(r2_values[1]), ' rsqr (adjusted) ', format(r2_values[2]))
 		}
 	}
 	# Add a column to data for jittered x-values
@@ -149,14 +149,14 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 	# Boxplot
 	WBplot(data, wid=wid, cap=cap, xlab=xlab, ylab=ylab, xrange=xrange, yrange=yrange, lwd=lwd, type=type)
 	# Plot individual data points with reduced jitter, reduced size, and unfilled circles without x and y axes
-	points(data$x_jitter, data$y, pch=19, bg="transparent", col="darkgray", lwd=lwd/2, cex=p.cex)
+	points(data$x_jitter, data$y, pch=19, bg='transparent', col='darkgray', lwd=lwd/2, cex=p.cex)
 	# Connect data points within subjects with gray dotted lines
 	line=TRUE
 	if (line){
 		subjects <- unique(data$s)
 		for(subj in subjects){
 			subset_data <- data[data$s == subj, ]
-			lines(subset_data$x_jitter, subset_data$y, col="darkgray", lwd=lwd, lty=3)  # lty=2 for dotted line
+			lines(subset_data$x_jitter, subset_data$y, col='darkgray', lwd=lwd, lty=3)  # lty=2 for dotted line
 		}
 	}
 	
@@ -164,7 +164,7 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 		# Predict y values using the model for new data with matching grouping factor levels
 		y_pred <- m * unique(x) + c
 		# Add the line of best fit
-		lines(unique(x), y_pred, col="black", lwd=lwd, lty=1)
+		lines(unique(x), y_pred, col='black', lwd=lwd, lty=1)
 	}
 	
 	# list(reversal=-c/m, r2_values =r2_values)	
@@ -176,7 +176,7 @@ R2calc <- function(formula, data) {
 	formula_str <- deparse(formula)
 	
 	# Fit the model
-	if (grepl("\\|", formula_str)) {
+	if (grepl('\\|', formula_str)) {
 		# Model has random effects (intercepts or slopes)
 		model <- lmer(formula, data = data)
 		includeRandomEffect <- TRUE
@@ -337,7 +337,7 @@ plot.error.bars <- function(X, Y, color, lwd, xrange, yrange) {
 }
 
 fun.plot2 = function(data12, data13){
-	plot(NULL, xlim=xrange, ylim=yrange, xlab="x", ylab="y", type="n", bty='n')
+	plot(NULL, xlim=xrange, ylim=yrange, xlab='x', ylab='y', type='n', bty='n')
 
 	box12 <- output.fun(data12, MAD=TRUE)
 	box13 <- output.fun(data13, MAD=TRUE)
@@ -365,13 +365,13 @@ fun.plot2 = function(data12, data13){
 # Fig 2
 # import data sets from stored csv	
 data2F <- import.fun('data2F')
-data1 <- data2F[, c("s", "x", "y1")]; colnames(data1)[3] <- "y"
-data2 <- data2F[, c("s", "x", "y2")]; colnames(data2)[3] <- "y"
-data3 <- data2F[, c("s", "x", "y3")]; colnames(data3)[3] <- "y"
+data1 <- data2F[, c('s', 'x', 'y1')]; colnames(data1)[3] <- 'y'
+data2 <- data2F[, c('s', 'x', 'y2')]; colnames(data2)[3] <- 'y'
+data3 <- data2F[, c('s', 'x', 'y3')]; colnames(data3)[3] <- 'y'
 
 data2C <- import.fun('data2C')
-data4 <- data2C[, c("s", "x", "y1")]; colnames(data4)[3] <- "y"
-data5 <- data2C[, c("s", "x", "y2")]; colnames(data5)[3] <- "y"
+data4 <- data2C[, c('s', 'x', 'y1')]; colnames(data4)[3] <- 'y'
+data5 <- data2C[, c('s', 'x', 'y2')]; colnames(data5)[3] <- 'y'
 
 data6 <- import.fun('data2G')
 data7 <- import.fun('data2J')
@@ -421,8 +421,8 @@ wilcox.f(data=data9,group1=1, group2=2)
 
 # Fig3F
 data3F <- import.fun('data3F')
-data10 <- data3F[, c("s", "x", "y1")]; colnames(data10)[3] <- "y"
-data11 <- data3F[, c("s", "x", "y2")]; colnames(data11)[3] <- "y"
+data10 <- data3F[, c('s', 'x', 'y1')]; colnames(data10)[3] <- 'y'
+data11 <- data3F[, c('s', 'x', 'y2')]; colnames(data11)[3] <- 'y'
 
 dev.new(width=6 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
@@ -455,8 +455,8 @@ wilcox.f(data=test1,group1=1, group2=2, paired=FALSE)
 ```R
 # Fig4EF 
 data4E <- import.fun('data12')
-data12 <- data4E[, c("s", "x", "y1")]; colnames(data12)[3] <- "y"
-data13 <- data4E[, c("s", "x", "y2")]; colnames(data13)[3] <- "y"
+data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
+data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
 
 dev.new(width=9 ,height=4, noRStudioGD=TRUE)
 par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
