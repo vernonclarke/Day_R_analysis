@@ -635,7 +635,7 @@ text(x = 2.5, y = 0, labels = 'boxplot')
 - **The native R function, `boxplot` calculates whisker-and-box plots based on Tukey's original 'hinges' method by calling `stats::fivenum`**.
 - **The function `WBplot` calculates quartiles using R function `quantile`. This can be set to type = 1 to 9**.
 - **The default in `WBplot` is type = 6 which should produce similar results to `GraphPad Prism`**.
-- **For results closer (but not identical) to Tukey's 'hinges' method / R's native `boxplot`, set type = 7**.
+- **For results closer to Tukey's 'hinges' method / R's native `boxplot`, set type = 7**.
 
 ### Random Mixed-Effects Model
 
