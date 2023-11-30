@@ -703,7 +703,7 @@ $$ R^2_{adj, LM} = 1 - \left( \frac{(1 - R^2_{LM}) \times (n - 1)}{n - p - 1} \r
 
 where $R^2_{LM}$ is the $R^2$ for the linear model, $n$ is the number of observations, and $p$ is the number of predictors excluding the intercept. 
 
-Adjusted R-squared accounts for the number of predictors in the model and provides a more adjusted measure of the model's explanatory power, especially useful when comparing models with different numbers of predictors.
+Adjusted R-squared accounts for the number of predictors in the model and is especially useful when comparing models with different numbers of predictors.
 
 
 ## References
