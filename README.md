@@ -216,7 +216,7 @@ R2calc <- function(formula, data) {
 }
 
 
-# simple function to import data from a ''csv' file
+# simple function to import data from a 'csv' file
 #  if NA is zero imports all exlcude excludes those subjects s
 import.fun <- function(name, exclude=NA){
 	df <- read.csv(paste0(name, '.csv'))
