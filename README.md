@@ -610,11 +610,9 @@ This method is somewhat akin to R's 'Type 1' method for calculating quantiles, a
 
 The `quantile` function in R with the option `type=7` in R's default `boxplot`, the applied method is close to, but not exactly the same as, Tukey's original 'hinge' method. 
 
-`GraphPad Prism` default seems to calculate quartiles using the method which corresponds to 'Type 6' in R's `quantile` function. For further information [see](https://www.graphpad.com/support/faq/how-prism-computes-percentiles/).
+`GraphPad Prism` default seems to calculate quartiles using the method which corresponds to 'Type 6' in R's `quantile` function. For further information [see](https://www.graphpad.com/support/faq/how-prism-computes-percentiles/)
 
-
-
-A comparison of WBplot with 'Type 6' , 'Type 7' and R's native `boxplot` function is illustrated by running the following code:
+A comparison of `WBplot` with 'Type 6' , 'Type 7' and R's native `boxplot` function is illustrated by running the following code:
 
 ```R
 data4E <- import.fun('data12')
