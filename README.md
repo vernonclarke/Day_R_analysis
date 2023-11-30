@@ -106,8 +106,7 @@ isSingular.fun <- function(formula, data){
 	isSingular(mod)
 } 
 	
-fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){
-	
+fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){	
 	# Fit the model using lmer
 	# model_lmer <- lmer(y ~ x + (1|s))
 	x <- data$x
@@ -171,7 +170,6 @@ fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab
 }
 
 R2calc <- function(formula, data) {
-
 	# Convert the model formula to a string
 	formula_str <- deparse(formula)
 	
