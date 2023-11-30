@@ -598,9 +598,9 @@ In R's `quantile` function, there are 9 types of quantile algorithms, named type
 - Type 8: Linear interpolation between the points that capture the α percent and 1-α percent of the data.
 - Type 9: Linear interpolation of the approximate medians for order statistics.   
 
-**Nb** The R function, `boxplot` is not used to make whisker-and-box plots because this is not prefered method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr and min and max based on Tukey's five-number summary definition.
+**Nb** The R function, `boxplot` is not used to make whisker-and-box plots because this is not prefered method used by most graphics software. The native R function calls `boxplot.stats` which, in turn, calls `stats::fivenum` to calculate the medium iqr, minimum and maximum based on Tukey's five-number summary definition.
 
-John Tukey's 'hinges' which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
+John Tukey's 'hinges', which are used in his five-number summary and for drawing boxplots, are similar to quartiles but can be calculated in a way that's slightly different from any of the standard quantile methods in R. Tukey's original definition involved using the median to split the data set and then finding the median of the lower and upper halves. If the data set or data half contains an odd number of points, the median is included in both halves.
 
 How Tukey's hinges are usually computed:
 
