@@ -732,7 +732,7 @@ Adjusted R-squared accounts for the number of predictors in the model and is esp
 
 [Bates D, Maechler M, Bolker B, Walker S (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.](https://doi.org/10.18637/jss.v067.i01)
 
-[Hyndman R. J. and Fan Y (1996), Sample Quantiles in Statistical Packages. The American Statistician, Vol. 50(4), pp. 361-365.](https://doi.org/10.2307/2684934)
+[Hyndman R. J. and Fan Y (1996), Sample Quantiles in Statistical Packages. The American Statistician, Vol. 50(4), 361-365.](https://doi.org/10.2307/2684934)
 
 [Nakagawa S, Johnson P. C. D. and Schielzeth H (2017). The coefficient of determination Rsqr and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. J. R. Soc. 14 14(134):20170213.](http://dx.doi.org/10.1098/rsif.2017.0213)
 
