@@ -64,7 +64,7 @@ setwd(wd)
    These custom-written functions are required to make the graphs and perform the statistical analyses.
 
 ```R
-WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, type=6) {
+WBplot <- function(data, wid=1, cap=0.5, xlab='membrane potential (mV)', ylab='PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, type=6) {
 	x <- data$x
 	y <- data$y
 	unique_x <- unique(data$x)
@@ -106,7 +106,7 @@ isSingular.fun <- function(formula, data){
 	isSingular(mod)
 } 
 	
-fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){	
+fun.plot=function(data, wid=1, cap=0.5, xlab='membrane potential (mV)', ylab='PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){	
 	# Fit the model using lmer
 	# model_lmer <- lmer(y ~ x + (1|s))
 	x <- data$x
@@ -176,16 +176,16 @@ R2calc <- function(formula, data) {
 	# Fit the model
 	if (grepl('\\|', formula_str)) {
 		# Model has random effects (intercepts or slopes)
-		model <- lmer(formula, data = data)
+		model <- lmer(formula, data=data)
 		includeRandomEffect <- TRUE
 	} else {
 		# Model is a simple linear model
-		model <- lm(formula, data = data)
+		model <- lm(formula, data=data)
 		includeRandomEffect <- FALSE
 	}
 	
 	# Variance explained by fixed effects (sigma^2_f)
-	y_pred_fixed <- predict(model, re.form = NA)
+	y_pred_fixed <- predict(model, re.form=NA)
 	varFixed <- var(y_pred_fixed)
 	
 	if (includeRandomEffect) {
@@ -199,7 +199,7 @@ R2calc <- function(formula, data) {
 		R2_marginal <- varFixed / (varFixed + varRandom + varResid)
 		R2_conditional <- (varFixed + varRandom) / (varFixed + varRandom + varResid)
 		
-		return(list(marginal = R2_marginal, conditional = R2_conditional))
+		return(list(marginal=R2_marginal, conditional=R2_conditional))
 
 	} else {
 		# For lm model, R-squared is simply the variance of the predicted values over the total variance
@@ -211,7 +211,7 @@ R2calc <- function(formula, data) {
 			p <- length(coef(model)) - 1  # number of predictors, excluding intercept
 		adjR2 <- 1 - (1 - R2) * (n - 1) / (n - p - 1)
 
-			return(list(R2 = R2, adjustedR2 = adjR2))
+			return(list(R2=R2, adjustedR2=adjR2))
 	}
 }
 
@@ -249,15 +249,15 @@ wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided',
 	# Extract data for the second group
 	y <- data[data$x == group2,][order(data[data$x == group2,]$s),]$y
 	# Perform the Wilcoxon Signed-Rank Test
-	wilcox.test(x, y, paired = paired, alternative = alternative, exact = exact)
+	wilcox.test(x, y, paired=paired, alternative=alternative, exact=exact)
 }
 
 # Functions for FigS1	
 fun.plot.S1 <- function(){
-	plot(dataS1$'A+B', dataS1$'C', xlab = 'linear prediction (mV)', ylab = 'actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
+	plot(dataS1$'A+B', dataS1$'C', xlab='linear prediction (mV)', ylab='actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
 
 	# Define the points for the y=x line
-	xline = yline = seq(0, 40, 0.1)
+	xline=yline=seq(0, 40, 0.1)
 
 	# Add shading below the line using polygon
 	polygon(c(0, xline, 40), c(0, yline, 0), col='lightgray', border=NA)
@@ -269,7 +269,7 @@ fun.plot.S1 <- function(){
 	points(dataS1$'A+B', dataS1$'C', pch=20, col='black')
 }
 
-output.fun <- function(data, type=6, MAD = FALSE){
+output.fun <- function(data, type=6, MAD=FALSE){
 	unique_x <- unique(data$x)
 	out <- sapply(1:length(unique_x), function(ii){
 		current_x <- unique_x[ii]
@@ -291,7 +291,7 @@ output.fun <- function(data, type=6, MAD = FALSE){
 	
 	
 	if (MAD){
-		mad_value <- mad(d_filtered, constant = 1)
+		mad_value <- mad(d_filtered, constant=1)
 		c(min_val[[1]], median_val-mad_value, median_val, median_val+mad_value, max_val[[1]])	
 	}else{
 		c(min_val[[1]], q1[[1]], median_val, q3[[1]], max_val[[1]])	
@@ -303,7 +303,7 @@ output.fun <- function(data, type=6, MAD = FALSE){
     }else{
 	rownames(out) <- c('min','q1','median','q3','max')
     }
-    colnames(out) = unique_x
+    colnames(out)=unique_x
     return(out)
 }
 
@@ -375,14 +375,14 @@ data7 <- import.fun('data2J')
 
 # FIG2C
 dev.new(width=6 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
 
 fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
 
 # FIG2F
 dev.new(width=9 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data1, p.cex=0.6)
 
 fun.plot(data2, p.cex=0.6)
@@ -391,7 +391,7 @@ fun.plot(data3, p.cex=0.6)
 
 # FIG2GJ
 dev.new(width=6 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
 fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
@@ -407,7 +407,7 @@ data8 <- import.fun('data3CA')
 data9 <- import.fun('data3CB')
 
 dev.new(width=6 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
 fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
@@ -422,11 +422,11 @@ data10 <- data3F[, c('s', 'x', 'y1')]; colnames(data10)[3] <- 'y'
 data11 <- data3F[, c('s', 'x', 'y2')]; colnames(data11)[3] <- 'y'
 
 dev.new(width=6 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
-# Fig3F: statistcal tests; performing Mann U as not enough values for paired (n = 5 pairs is required)
+# Fig3F: statistcal tests; performing Mann U as not enough values for paired (n=5 pairs is required)
 wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
 
 # nb result IS, in fact, identical to the previous one (simply because pairs in data10 and data11 go in identical directions)
@@ -442,7 +442,7 @@ set.seed(42)
 # Replace y with normally distributed numbers
 test1$y <- rnorm(nrow(test1))
 
-# Add 10 if x = 1, and 20 if x = 2
+# Add 10 if x=1, and 20 if x=2
 test1$y <- test1$y + ifelse(test1$x == 1, 10, ifelse(test1$x == 2, 20, 0)) # all values in level 2 are larger than any value in level 1
 
 wilcox.f(data=test1,group1=1, group2=2, paired=FALSE)
@@ -455,7 +455,7 @@ data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
 data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
 
 dev.new(width=9 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 
@@ -479,20 +479,20 @@ wilcox.f(data=test2,group1=2, group2=3)
 ```R	
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
-colnames(dataS1) = c('A+B', 'C')
+colnames(dataS1)=c('A+B', 'C')
 
 # FigS1
 dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot.S1()
 
 	
 # Initial settings
-lwd = 0.8; xrange = c(0,0.25); yrange = c(0,35)
+lwd=0.8; xrange=c(0,0.25); yrange=c(0,35)
 
 # FigS1
 dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot2(data12, data13)
 ```
 
@@ -616,17 +616,17 @@ data4E <- import.fun('data12')
 data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
 
 dev.new(width=9 ,height=4, noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 
-WBplot(data=data12, wid=0.2, cap=0.1, xlab = '', ylab = '', xrange=c(0.5,3.5), yrange=c(0,35), lwd=0.8)
+WBplot(data=data12, wid=0.2, cap=0.1, xlab='', ylab='', xrange=c(0.5,3.5), yrange=c(0,35), lwd=0.8)
 # Add text to the plot
-text(x = 2.5, y = 0, labels = 'WBplot; type=6')
+text(x=2.5, y=0, labels='WBplot; type=6')
 
-WBplot(data=data12, wid=0.2, cap=0.1, xlab = '', ylab = '', xrange=c(0.5,3.5), yrange=c(0,35), lwd=0.8, type=7)
-text(x = 2.5, y = 0, labels = 'WBplot; type=7')
+WBplot(data=data12, wid=0.2, cap=0.1, xlab='', ylab='', xrange=c(0.5,3.5), yrange=c(0,35), lwd=0.8, type=7)
+text(x=2.5, y=0, labels='WBplot; type=7')
 
-boxplot(y ~ x, data = data12, main = '', xlab = '', ylab = '', ylim=c(0,35), xlim=c(0.5,3.5), boxwex=0.35, lwd=0.8, col='white', border='black', frame=FALSE)
-text(x = 2.5, y = 0, labels = 'boxplot')
+boxplot(y ~ x, data=data12, main='', xlab='', ylab='', ylim=c(0,35), xlim=c(0.5,3.5), boxwex=0.35, lwd=0.8, col='white', border='black', frame=FALSE)
+text(x=2.5, y=0, labels='boxplot')
 ```
 
 

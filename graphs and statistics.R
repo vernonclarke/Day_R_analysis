@@ -21,8 +21,8 @@ wd <- paste0(getwd(), mypath)
 setwd(wd)
 ##############################################################################################################
 # Custom functions
-WBplot <- function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', 
-ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
+WBplot <- function(data, wid=1, cap=0.5, xlab='membrane potential (mV)', 
+ylab='PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), 
 lwd=0.8, type=6) {
 	x <- data$x
 	y <- data$y
@@ -65,7 +65,7 @@ isSingular.fun <- function(formula, data){
 	isSingular(mod)
 	} 
 	
-fun.plot = function(data, wid=1, cap=0.5, xlab = 'membrane potential (mV)', ylab = 'PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){
+fun.plot <- function(data, wid=1, cap=0.5, xlab='membrane potential (mV)', ylab='PSP amplitude (mV)', xrange=c(-70,-50), yrange=c(-10,15), lwd=0.8, amount=0.5, p.cex=0.25, type=6,  regression=TRUE, silent=FALSE){
 	
 	# Fit the model using lmer
 	# model_lmer <- lmer(y ~ x + (1|s))
@@ -137,16 +137,16 @@ R2calc <- function(formula, data) {
 	# Fit the model
 	if (grepl('\\|', formula_str)) {
 		# Model has random effects (intercepts or slopes)
-		model <- lmer(formula, data = data)
+		model <- lmer(formula, data=data)
 		includeRandomEffect <- TRUE
 	} else {
 		# Model is a simple linear model
-		model <- lm(formula, data = data)
+		model <- lm(formula, data=data)
 		includeRandomEffect <- FALSE
 	}
 	
 	# Variance explained by fixed effects (sigma^2_f)
-	y_pred_fixed <- predict(model, re.form = NA)
+	y_pred_fixed <- predict(model, re.form=NA)
 	varFixed <- var(y_pred_fixed)
 	
 	if (includeRandomEffect) {
@@ -160,7 +160,7 @@ R2calc <- function(formula, data) {
 		R2_marginal <- varFixed / (varFixed + varRandom + varResid)
 		R2_conditional <- (varFixed + varRandom) / (varFixed + varRandom + varResid)
 		
-		return(list(marginal = R2_marginal, conditional = R2_conditional))
+		return(list(marginal=R2_marginal, conditional=R2_conditional))
 
 	} else {
 		# For lm model, R-squared is simply the variance of the predicted values 
@@ -173,7 +173,7 @@ R2calc <- function(formula, data) {
   			p <- length(coef(model)) - 1  # number of predictors, excluding intercept
 		adjR2 <- 1 - (1 - R2) * (n - 1) / (n - p - 1)
 
-  			return(list(R2 = R2, adjustedR2 = adjR2))
+  			return(list(R2=R2, adjustedR2=adjR2))
 	}
 }
 
@@ -211,15 +211,15 @@ wilcox.f <- function(data, group1, group2, paired=TRUE, alternative='two.sided',
     	# Extract data for the second group
     	y <- data[data$x == group2,][order(data[data$x == group2,]$s),]$y
     	# Perform the Wilcoxon Signed-Rank Test
-    	wilcox.test(x, y, paired = paired, alternative = alternative, exact = exact)
+    	wilcox.test(x, y, paired=paired, alternative=alternative, exact=exact)
 }
 
 # Functions for FigS1	
-fun.plot.S1 = function(){
-	plot(dataS1$'A+B', dataS1$'C', xlab = 'linear prediction (mV)', ylab = 'actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
+fun.plot.S1 <- function(){
+	plot(dataS1$'A+B', dataS1$'C', xlab='linear prediction (mV)', ylab='actual combination', bty='n', pch=20, col='black', xlim=c(0,40), ylim=c(0,40))
 
 	# Define the points for the y=x line
-	xline = yline = seq(0, 40, 0.1)
+	xline=yline=seq(0, 40, 0.1)
 
 	# Add shading below the line using polygon
 	polygon(c(0, xline, 40), c(0, yline, 0), col='lightgray', border=NA)
@@ -231,7 +231,7 @@ fun.plot.S1 = function(){
 	points(dataS1$'A+B', dataS1$'C', pch=20, col='black')
 }
 
-output.fun <- function(data, type=6, MAD = FALSE){
+output.fun <- function(data, type=6, MAD=FALSE){
 	unique_x <- unique(data$x)
 	out <- sapply(1:length(unique_x), function(ii){
 		current_x <- unique_x[ii]
@@ -253,7 +253,7 @@ output.fun <- function(data, type=6, MAD = FALSE){
         
         
         if (MAD){
-        	mad_value <- mad(d_filtered, constant = 1)
+        	mad_value <- mad(d_filtered, constant=1)
         	c(min_val[[1]], median_val-mad_value, median_val, median_val+mad_value, max_val[[1]])	
         }else{
         	c(min_val[[1]], q1[[1]], median_val, q3[[1]], max_val[[1]])	
@@ -265,7 +265,7 @@ output.fun <- function(data, type=6, MAD = FALSE){
     }else{
     	rownames(out) <- c('min','q1','median','q3','max')
     }
-    colnames(out) = unique_x
+    colnames(out)=unique_x
     return(out)
 }
 
@@ -295,7 +295,7 @@ plot.error.bars <- function(X, Y, color, lwd, xrange, yrange) {
 	segments(x_median - 0.5*wid.x, y_q3, x_median + 0.5*wid.x, y_q3, col=color, lwd=lwd)	  
 }
 
-fun.plot2 = function(data12, data13){
+fun.plot2 <- function(data12, data13){
 	plot(NULL, xlim=xrange, ylim=yrange, xlab='x', ylab='y', type='n', bty='n')
 
 	box12 <- output.fun(data12, MAD=TRUE)
@@ -332,7 +332,7 @@ data7 <- import.fun('data2J')
 
 # FIG2C
 dev.new(width=6 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data4, ylab='PSC amplitude (pA)', yrange=c(-20,25), p.cex=0.6)
 
 # model is  y ~ x + (1 | s) 
@@ -389,7 +389,7 @@ fun.plot(data5, yrange=c(-20,25), p.cex=0.6)
 
 # FIG2F
 dev.new(width=9 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,3), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data1, p.cex=0.6)
 
 # model is  y ~ x + (1 | s) 
@@ -471,7 +471,7 @@ fun.plot(data3, p.cex=0.6)
 
 # FIG2GJ
 dev.new(width=6 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data6, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
 fun.plot(data7, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(-70, -55), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
@@ -486,7 +486,7 @@ wilcox.f(data=data6, group1=1, group2=2)
 # alternative hypothesis: true location shift is not equal to 0
 
 # Warning message:
-# In wilcox.test.default(x, y, paired = paired, alternative = alternative,  :
+# In wilcox.test.default(x, y, paired=paired, alternative = alternative,  :
 #   cannot compute exact p-value with ties
 
 wilcox.f(data=data7, group1=1, group2=2)
@@ -506,7 +506,7 @@ data8 <- import.fun('data3CA')
 data9 <- import.fun('data3CB')
 
 dev.new(width=6 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data8, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
 fun.plot(data9, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
@@ -534,12 +534,12 @@ data10 <- data3F[, c('s', 'x', 'y1')]; colnames(data10)[3] <- 'y'
 data11 <- data3F[, c('s', 'x', 'y2')]; colnames(data11)[3] <- 'y'
 
 dev.new(width=6 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data10, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(data11, wid=0.25, cap=0.125, xrange=c(0.5, 2.5), yrange=c(0, 5), amount=0.05, p.cex=0.6, regression=FALSE, silent=TRUE)
 
 
-# Fig3F: statistcal tests; performing Mann U as not enough values for paired (n = 5 pairs is required)
+# Fig3F: statistcal tests; performing Mann U as not enough values for paired (n=5 pairs is required)
 wilcox.f(data=data10,group1=1, group2=2, paired=FALSE)
 
 # 	Wilcoxon rank sum exact test
@@ -564,7 +564,7 @@ data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
 data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
 
 dev.new(width=9 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,2), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot(data12, yrange=c(0,35), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', ylab='', wid=0.2, cap=0.1, amount=0, p.cex=0.6, regression=FALSE, silent=TRUE)
 
@@ -589,20 +589,20 @@ wilcox.f(data=data13,group1=2, group2=3)
 ##############################################################################################################
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
-colnames(dataS1) = c('A+B', 'C')
+colnames(dataS1)=c('A+B', 'C')
 
 # FigS1
 dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot.S1()
 
 	
 # Initial settings
-lwd = 0.8; xrange = c(0,0.25); yrange = c(0,35)
+lwd <- 0.8; xrange <- c(0,0.25); yrange <- c(0,35)
 
 # FigS1
 dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
-par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma = c(2, 2, 2, 0), ps=10, cex = 0.9, cex.main = 0.9)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
 fun.plot2(data12, data13)
 ##############################################################################################################
 # saving graphs: if plotsave <- TRUE then any generated graphs are saved as svgs into working folder.
