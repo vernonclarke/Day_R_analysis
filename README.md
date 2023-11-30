@@ -582,7 +582,7 @@ This is a standardized way of displaying the distribution of data based on a fiv
 
 Any outliers are removed and the default setting for calculating the quartiles is `type = 6`.
 
-In R's `quantile` function, there are 9 types of quantile algorithms, named type 1 to type 9. These algorithms use different methods to calculate specified quantiles (for more information [see](https://doi.org/10.2307/2684934)). 
+In R's `quantile` function, there are 9 types of quantile algorithms, named 1 to  9 (for more information [see](https://doi.org/10.2307/2684934)). 
 
 - Type 1: Inverse of the empirical distribution function.
 - Type 2: Similar to type 1 but with averaging at discontinuities.
