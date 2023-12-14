@@ -465,6 +465,19 @@ wilcox.f(data=data13,group1=2, group2=3)
 ```
 
 ```R
+# simple eg to illustrate why p values in Fig4E are identical:
+test2 <- data12
+# Replace y with numbers generated from a normal distribution
+set.seed(42) # for reproducibility
+test2$y <- rnorm(nrow(test2))
+
+# Add 10, 20, or 30 to y based on the value of x
+test2$y <- test2$y + ifelse(test2$x == 1, 10, ifelse(test2$x == 2, 20, 30)) # direction of change for each pair is the same
+
+wilcox.f(data=test2,group1=2, group2=3)
+```
+
+```R
 # Fig4F
 # scatter plot and median and IQR
 data4E <- import.fun('data12')
@@ -479,18 +492,6 @@ par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main
 fun.plot2(data12, data13)
 ```
 
-```R
-# simple eg to illustrate why p values in Fig4EF are identical:
-test2 <- data12
-# Replace y with numbers generated from a normal distribution
-set.seed(42) # for reproducibility
-test2$y <- rnorm(nrow(test2))
-
-# Add 10, 20, or 30 to y based on the value of x
-test2$y <- test2$y + ifelse(test2$x == 1, 10, ifelse(test2$x == 2, 20, 30)) # direction of change for each pair is the same
-
-wilcox.f(data=test2,group1=2, group2=3)
-```
 ```R	
 # data for figS1 
 dataS1 <- read.csv('data14.csv')
