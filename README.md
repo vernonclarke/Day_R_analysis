@@ -4,7 +4,9 @@ Recreates graphical outputs and statistical analyses in the manuscript:
 
 Day M., Belal M., Surmeier W. C., Melendez A., Wokosin, D., Tkatch T., Clarke V. R. J. and Surmeier D. J.
 
-State-dependent GABAergic regulation of striatal spiny projection neuron excitability (2023)
+State-dependent GABAergic regulation of striatal spiny projection neuron excitability (2023) (Working tile)
+
+This script and accompanying folder containing *.csv files of data should reproduce figues 1-4 and supplementary figure S1 of the manuscript.
 
 ## Table of Contents
 - [Initial Set Up](#initial-set-up)
@@ -750,7 +752,6 @@ Adjusted R-squared accounts for the number of predictors in the model and is esp
 [R Core Team (2023). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.](https://www.R-project.org/)
 
 [Wickham H, Henry L, Pedersen T, Luciani T, Decorde M, Lise V (2023). _svglite: An 'SVG' Graphics Device_. R package version 2.1.2.](https://CRAN.R-project.org/package=svglite)
-
 
 
 This code was written by Vernon Clarke.
