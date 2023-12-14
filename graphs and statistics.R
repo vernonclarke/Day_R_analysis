@@ -588,7 +588,7 @@ wilcox.f(data=data13,group1=2, group2=3)
 # nb result IS, in fact, identical to the previous one (simply because pairs in data12 and data13 go in identical directions with no ties)
 ##############################################################################################################
 # Fig4F
-# scatter plot and median with error bars representing the median adjusted deviation (or MAD), a more robust estimate of variability 
+# scatter plot and median with error bars representing the median absolute deviation (or MAD), a more robust estimate of variability 
 data4E <- import.fun('data12')
 data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
 data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
