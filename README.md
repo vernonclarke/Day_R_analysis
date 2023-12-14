@@ -6,7 +6,7 @@ Day M., Belal M., Surmeier W. C., Melendez A., Wokosin, D., Tkatch T., Clarke V.
 
 State-dependent GABAergic regulation of striatal spiny projection neuron excitability (2023) (Working tile)
 
-This script and accompanying folder containing '*.csv' files of data should reproduce figures 1-4 and supplementary figure S1 of the manuscript.
+This script and accompanying folder containing `*.csv` files of data should reproduce figures 1-4 and supplementary figure S1 of the manuscript.
 
 ## Table of Contents
 - [Initial Set Up](#initial-set-up)
