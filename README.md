@@ -449,7 +449,7 @@ wilcox.f(data=test1,group1=1, group2=2, paired=FALSE)
 ```
  
 ```R
-# Fig4EF 
+# Fig4E 
 data4E <- import.fun('data12')
 data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
 data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
@@ -462,6 +462,21 @@ fun.plot(subset(data13, x != 1), yrange=c(0,0.25), xrange=c(0.5,3.5), xlab='', y
 # stats for Fig4E (dataset combined)
 wilcox.f(data=data12,group1=2, group2=3)
 wilcox.f(data=data13,group1=2, group2=3)
+```
+
+```R
+# Fig4F
+# scatter plot and median and IQR
+data4E <- import.fun('data12')
+data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
+data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
+
+# Initial settings
+lwd <- 0.8; xrange <- c(0,0.25); yrange <- c(0,35)
+
+dev.new(width=4.5 ,height=4,noRStudioGD=TRUE)
+par(mar=c(1, 1, 1, 1), mfrow=c(1,1), oma=c(2, 2, 2, 0), ps=10, cex=0.9, cex.main=0.9)
+fun.plot2(data12, data13)
 ```
 
 ```R
