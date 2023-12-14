@@ -479,7 +479,7 @@ wilcox.f(data=test2,group1=2, group2=3)
 
 ```R
 # Fig4F
-# scatter plot and median and IQR
+# scatter plot and median with error bars tepresenting the median adjusted deviation (or MAD), a more robust estimate of variability 
 data4E <- import.fun('data12')
 data12 <- data4E[, c('s', 'x', 'y1')]; colnames(data12)[3] <- 'y'
 data13 <- data4E[, c('s', 'x', 'y2')]; colnames(data13)[3] <- 'y'
