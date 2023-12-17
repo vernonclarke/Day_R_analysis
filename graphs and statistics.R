@@ -491,15 +491,12 @@ wilcox.f(data=data6, group1=1, group2=2)
 
 wilcox.f(data=data7, group1=1, group2=2)
 
-# 	Wilcoxon signed rank test with continuity correction
+# 	Wilcoxon signed rank exact test
 
 # data:  x and y
-# V = 21, p-value = 0.03552
+# V = 21, p-value = 0.03125
 # alternative hypothesis: true location shift is not equal to 0
 
-# Warning message:
-# In wilcox.test.default(x, y, paired = paired, alternative = alternative,  :
-#   cannot compute exact p-value with ties
 ##############################################################################################################
 # Fig3C
 data8 <- import.fun('data3CA')
